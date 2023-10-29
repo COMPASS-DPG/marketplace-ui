@@ -10,7 +10,7 @@ export type ButtonType = {
 const ButtonFill = ({ onClick, children, classes }: ButtonType) => {
   return (
     <button
-      className={`rounded-md border ${classes} box-border block px-4 py-0 text-base font-semibold text-white hover:opacity-80`}
+      className={`rounded-md border ${classes} box-border block px-4 py-0 text-base font-semibold hover:opacity-80`}
       onClick={() => onClick()}
     >
       {children}

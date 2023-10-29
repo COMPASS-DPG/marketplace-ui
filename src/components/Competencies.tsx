@@ -1,18 +1,40 @@
+import SingleCompetency from '@/components/course-description/SingleCompetency';
+
+const competencies = [
+  {
+    key: 1,
+    name: 'Pregnancy Identification',
+    levels: [
+      'Understands health of males and females and initial assessment protocols',
+      'Identifies pregnancy using Nischaya Kit',
+    ],
+  },
+  {
+    key: 3,
+    name: 'Pregnancy Identification',
+    levels: [
+      'Understands health of males and females and initial assessment protocols',
+      'Identifies pregnancy using Nischaya Kit',
+    ],
+  },
+  {
+    key: 2,
+    name: 'Pregnancy Identification',
+    levels: [
+      'Understands health of males and females and initial assessment protocols',
+      'Identifies pregnancy using Nischaya Kit',
+    ],
+  },
+];
+
 const Competencies = () => {
   return (
-    <div className=''>
-      <p className='pt-5 text-[16px] font-semibold leading-6 text-[#272728]'>
-        Competencies
-      </p>
-
-      <p className='color-[##65758C] py-3 text-[15px] leading-6'>
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-        dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia voluptas
-        sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt
-        mollit anim id essed quia consequuntur maExcepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-        id es
-      </p>
+    <div className='py-4 '>
+      {competencies.map((competency) => {
+        return (
+          <SingleCompetency key={competency.key} competency={competency} />
+        );
+      })}
     </div>
   );
 };

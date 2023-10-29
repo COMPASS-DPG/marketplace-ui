@@ -9,7 +9,7 @@ const ColoredText = ({
 }) => {
   return (
     <span
-      className={`mx-1 rounded-md bg-['${backGroundColor}'] px-2 text-[12px] font-normal text-['${textColor}']`}
+      className={`mx-1 rounded-md bg-[${backGroundColor}] px-2 text-[12px] font-normal text-[${textColor}]`}
     >
       {text}
     </span>

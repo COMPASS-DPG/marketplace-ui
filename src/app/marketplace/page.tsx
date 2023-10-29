@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import CouseCard from '@/components/Course/CouseCard';
@@ -10,7 +11,14 @@ import Footer from '@/components/navbar/Footer';
 import SwiperDiv from '@/components/SwiperDiv';
 
 const MarketPlace = () => {
+  const router = useRouter();
+
   const [input, setInput] = useState<string>('');
+
+  const handleClick = (value: string) => {
+    router.push(value);
+  };
+
   return (
     <div>
       <div className='px-5 pb-4 pt-4 '>
@@ -26,6 +34,7 @@ const MarketPlace = () => {
             value={input}
             onChange={setInput}
             placeholder='Search your course...'
+            handleClick={handleClick}
           />
         </div>
         <div className='flex items-center justify-between'>
@@ -40,7 +49,9 @@ const MarketPlace = () => {
       <div>
         <div className='mt-5 flex items-center justify-between px-5 py-4'>
           <Heading heading='Recommended Courses' />
-          <SeeAll heading='See all' />
+          <div onClick={() => handleClick('/recommended-courses')}>
+            <SeeAll heading='See all' />
+          </div>
         </div>
         <div className='flex  gap-2 px-4'>
           <CouseCard />

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import { oxanium } from '../FontFamily';
@@ -12,12 +13,16 @@ const TopNavbar = () => {
     >
       <div>COMPASS</div>
       <div className='flex items-center justify-center gap-2'>
-        <div className='border-neutural-100 rounded-lg border p-2'>
-          <Wallet width='24px' />
-        </div>
-        <div className='border-neutural-100 rounded-lg border'>
-          <NotificationBell width='42px' />
-        </div>
+        <Link href='/purchase-history'>
+          <div className='border-neutural-100 cursor-pointer rounded-lg border p-2'>
+            <Wallet width='24px' />
+          </div>
+        </Link>
+        <Link href='/notifications'>
+          <div className='border-neutural-100 cursor-pointer rounded-lg border'>
+            <NotificationBell width='42px' />
+          </div>
+        </Link>
       </div>
     </div>
   );

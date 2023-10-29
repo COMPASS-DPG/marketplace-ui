@@ -19,13 +19,13 @@ const ButtonPopup = () => {
           <div className='flex justify-center gap-5 pt-4'>
             <ButtonFill
               onClick={() => null}
-              classes='w-[140px] h-[36px] bg-[#EEF5FF] text-[#000]'
+              classes='w-[140px] h-[36px] bg-[#EEF5FF] text-[#385B8B]'
             >
               Close
             </ButtonFill>
             <ButtonFill
               onClick={() => null}
-              classes='w-[140px] h-[36px] bg-[#385B8B]'
+              classes='w-[140px] h-[36px] bg-[#385B8B] text-[#fff]'
             >
               Confirm
             </ButtonFill>

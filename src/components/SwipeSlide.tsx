@@ -31,7 +31,7 @@ const SwipeSlide = () => {
           onClick={() => {
             return null;
           }}
-          classes='w-[100px] h-[30px] bg-[#385B8B]'
+          classes='w-[100px] h-[30px] bg-[#385B8B] text-[#fff]'
         >
           Continue
         </ButtonFill>

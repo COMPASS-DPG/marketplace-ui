@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { outfit } from '@/components/FontFamily';
 import Heading from '@/components/heading/Heading';
 
@@ -11,7 +13,9 @@ const PurchaseHistory = () => {
         <div className='flex h-[70px] w-[360px] items-center justify-between rounded-xl bg-[#E8FFEB] p-2.5'>
           <div>
             <div className='flex items-center gap-3'>
-              <LeftArrow width='24px' />
+              <Link href='/marketplace'>
+                <LeftArrow width='24px' />
+              </Link>
 
               <p className='text-base font-normal text-[#65758C]'>
                 Wallet Balance

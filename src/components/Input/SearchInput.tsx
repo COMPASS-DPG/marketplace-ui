@@ -10,6 +10,7 @@ type PropsType = {
   value: string;
   placeholder: string;
   required?: boolean;
+  handleClick?: (value: string) => void;
 };
 
 const SearchInput = ({
@@ -17,9 +18,13 @@ const SearchInput = ({
   placeholder,
   required = false,
   onChange,
+  handleClick = () => null,
 }: PropsType) => {
   return (
-    <div className='flex w-[331px] items-center justify-between rounded-full border px-[10px] py-[5px] shadow-md focus-within:border-blue-400 focus-within:ring-blue-400 '>
+    <div
+      onClick={() => handleClick('/search')}
+      className='flex w-[331px] items-center justify-between rounded-full border px-[10px] py-[5px] shadow-md focus-within:border-blue-400 focus-within:ring-blue-400 '
+    >
       <div>
         <svg
           className='h-4 w-4 text-gray-500 dark:text-gray-400'
@@ -49,7 +54,9 @@ const SearchInput = ({
           onChange={(e) => onChange(e?.target?.value)}
         />
       </div>
-      <div>{value != '' ? <RxCross1 /> : <Filter width='24px' />}</div>
+      <div className='pr-2'>
+        {value != '' ? <RxCross1 /> : <Filter width='24px' />}
+      </div>
     </div>
   );
 };
