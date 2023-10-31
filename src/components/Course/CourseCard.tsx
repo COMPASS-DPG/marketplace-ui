@@ -5,13 +5,15 @@ import Link from 'next/link';
 import { outfit } from '@/components/FontFamily';
 
 import ColoredText from '../heading/ColoredText';
+import { CourseType } from '../../app/marketplace/page';
 import CourseImage from '../../../public/images/courseImage.png';
 
 import { EditIcon, Star } from '~/svg';
-
-const CouseCard = () => {
+const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
+  const { id, course_name, competency, created_by, credit_rating } =
+    courseDetails;
   return (
-    <Link href='/course-description'>
+    <Link href={`/course-description/${id}`}>
       <div
         className={`h-[156px] w-[311px] rounded-2xl border bg-white shadow ${outfit.className}`}
       >
@@ -21,13 +23,14 @@ const CouseCard = () => {
             <p
               className={`w-[211px] ${outfit.className} text-[15px] font-bold text-zinc-800`}
             >
-              Communication ipsum dolpoid skills
+              {course_name}
             </p>
             <p
               className={`w-[211px] ${outfit.className} text-[13px] font-normal text-neutral-500`}
             >
-              Pregnancy Identification (L1,L2) , Birth Planning and
-              preparednes.....
+              {competency.map((competency, index) => {
+                return <div key={index}>{competency}</div>;
+              })}
             </p>
           </div>
           {/* Icon and language list */}
@@ -38,7 +41,7 @@ const CouseCard = () => {
             <span
               className={`${outfit.className} py-1 text-[13px] font-medium text-[#385B8B]  `}
             >
-              UPTSU
+              {created_by}
             </span>
             <ColoredText
               textColor='#4ACB5F'
@@ -58,7 +61,7 @@ const CouseCard = () => {
             Cr.100
           </p>
           <p className='flex items-center text-[12px] font-bold text-[#787878]'>
-            4.5
+            {credit_rating}
             <span className='pl-0.5'>
               <Star width='12px' />
             </span>
@@ -68,4 +71,4 @@ const CouseCard = () => {
     </Link>
   );
 };
-export default CouseCard;
+export default CourseCard;

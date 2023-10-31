@@ -1,11 +1,64 @@
+'use client';
+import axios from 'axios';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { outfit } from '@/components/FontFamily';
 import Heading from '@/components/heading/Heading';
 
 import { LeftArrow, Wallet } from '~/svg';
 
+const getEmptyValue = () => {
+  return [
+    {
+      id: 1,
+      amount: -50,
+      course_name: 'Software Engineering',
+      author: 'Author 18',
+      date: '2023-11-17',
+    },
+    {
+      id: 2,
+      amount: -60,
+      course_name: 'Project Management',
+      author: 'Author 20',
+      date: '2023-11-19',
+    },
+    {
+      id: 3,
+      amount: -25,
+      course_name: 'Digital Illustration',
+      author: 'Author 22',
+      date: '2023-11-21',
+    },
+  ];
+};
+type TransectionType = {
+  id: number;
+  amount: number;
+  course_name: string;
+  author: string;
+  date: string;
+};
+
 const PurchaseHistory = () => {
+  const [balance, setBalance] = useState<number>(0);
+  const [transections, setTransections] = useState<TransectionType[]>(
+    getEmptyValue()
+  );
+
+  const fetchTransections = () => {
+    axios.get('http://localhost:3000/wallet').then((response) => {
+      const data = response.data;
+      setBalance(data.main_wallet_balance);
+      setTransections(data.transactions);
+    });
+  };
+
+  useEffect(() => {
+    fetchTransections();
+  }, []);
+
   return (
     <div className={`${outfit.className}`}>
       {/*  top balance section */}
@@ -23,7 +76,7 @@ const PurchaseHistory = () => {
             </div>
 
             <p className='pl-10 pt-1 text-[24px] font-semibold text-[#385B8B]'>
-              243
+              {balance}
             </p>
           </div>
           <div>
@@ -37,18 +90,22 @@ const PurchaseHistory = () => {
       </div>
       {/* transection details */}
       <div className='m-5 ml-4'>
-        {[1, 2, 3, 4, 5, 6].map((item: number, index: number) => {
+        {transections.map((transection: TransectionType) => {
+          const { amount, id, course_name, author, date } = transection;
+
           return (
-            <div key={index}>
+            <div key={id}>
               <div className='flex  items-center justify-between'>
                 <p className='w-[260px] text-[16px] font-medium text-[#272728]'>
-                  Understand Medical Eligibility of FP Methods
+                  {course_name}
                 </p>
-                <p className='text-base font-semibold text-[#ED672B]'>-15</p>
+                <p className='text-base font-semibold text-[#ED672B]'>
+                  {amount}
+                </p>
               </div>
               <div className='flex justify-between'>
-                <p className='pt-2 text-xs text-[#697B7A]'>UPSTU</p>
-                <p className='pt-2 text-xs text-[#697B7A]'>Apr 4, 2023</p>
+                <p className='pt-2 text-xs text-[#697B7A]'>{author}</p>
+                <p className='pt-2 text-xs text-[#697B7A]'>{date}</p>
               </div>
 
               <hr className='my-4' />

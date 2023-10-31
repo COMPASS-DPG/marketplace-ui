@@ -6,7 +6,7 @@ import TitleNavbar from '@/components/navbar/TitleNavbar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className='max-w-[374px]	'>
       <Link href='marketplace'>
         <TitleNavbar title='Notifications' />
       </Link>

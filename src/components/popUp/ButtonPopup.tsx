@@ -1,6 +1,10 @@
 import ButtonFill from '@/components/buttons/ButtonFill';
 
-const ButtonPopup = () => {
+const ButtonPopup = ({
+  setShowPopUp,
+}: {
+  setShowPopUp: (value: boolean) => void;
+}) => {
   return (
     <div className='fixed inset-0 z-50 flex'>
       <div className='backdrop-blur-{none} absolute  inset-0  bg-black bg-opacity-50'></div>
@@ -18,13 +22,13 @@ const ButtonPopup = () => {
           </p>
           <div className='flex justify-center gap-5 pt-4'>
             <ButtonFill
-              onClick={() => null}
+              onClick={() => setShowPopUp(false)}
               classes='w-[140px] h-[36px] bg-[#EEF5FF] text-[#385B8B]'
             >
               Close
             </ButtonFill>
             <ButtonFill
-              onClick={() => null}
+              onClick={() => setShowPopUp(false)}
               classes='w-[140px] h-[36px] bg-[#385B8B] text-[#fff]'
             >
               Confirm

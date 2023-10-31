@@ -54,7 +54,7 @@ const SearchInput = ({
           onChange={(e) => onChange(e?.target?.value)}
         />
       </div>
-      <div className='pr-2'>
+      <div className='pr-3'>
         {value != '' ? <RxCross1 /> : <Filter width='24px' />}
       </div>
     </div>

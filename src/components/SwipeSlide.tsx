@@ -4,7 +4,7 @@ import { outfit, poppins } from '@/components/FontFamily';
 const SwipeSlide = () => {
   return (
     <div
-      className={`h-[140px] w-[331px] rounded-lg border border-gray-400 border-opacity-20 bg-white px-3 py-2  ${outfit.className}`}
+      className={`h-[140px] w-[331px] rounded-lg border border-gray-400 border-opacity-20 bg-white px-3 py-2  ${outfit.className} mb-[40px]`}
     >
       <p className='text-[12px] font-bold tracking-[0.12px] text-[#787878]'>
         Ongoing . 04/07{' '}
@@ -39,4 +39,5 @@ const SwipeSlide = () => {
     </div>
   );
 };
+
 export default SwipeSlide;
