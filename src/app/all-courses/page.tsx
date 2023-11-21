@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import CourseCard from '@/components/Course/CourseCard';
+import TitleNavbar from '@/components/navbar/TitleNavbar';
 
 const getInitialValue = () => {
   return [
@@ -69,10 +70,13 @@ const Courses = () => {
   }, []);
 
   return (
-    <div className='flex w-full flex-col items-center gap-5'>
-      {recommendedCourses.map((course) => {
-        return <CourseCard key={course.id} courseDetails={course} />;
-      })}
+    <div>
+      <TitleNavbar title='Recommended Courses' redirectTo='/marketplace' />
+      <div className='flex w-full flex-col items-center gap-5'>
+        {recommendedCourses.map((course) => {
+          return <CourseCard key={course.id} courseDetails={course} />;
+        })}
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import 'swiper/css';
 
-import CourseSlides from '@/components/Course/CourseSlides';
+import CourseBox from '@/components/Course/CourseBox';
 import { outfit } from '@/components/FontFamily';
 import Heading from '@/components/heading/Heading';
 import SeeAll from '@/components/heading/SeeAll';
@@ -130,37 +130,19 @@ const MarketPlace = () => {
         </div>
       </div>
       {/* Recommended course */}
-      <div>
-        <div className='mt-5 flex items-center justify-between px-5 py-4'>
-          <Heading heading='Recommended Courses' />
-          <div onClick={() => handleClick('/recommended-courses')}>
-            <SeeAll heading='See all' />
-          </div>
-        </div>
-        <div className='flex  gap-2 px-4'>
-          <CourseSlides CoursesArray={recommendedCourses} />
-        </div>
-      </div>
+      <CourseBox
+        heading='Recommended Courses'
+        CoursesList={recommendedCourses}
+      />
       {/* most popular course */}
-      <div>
-        <div className='mt-5 flex items-center justify-between px-5 py-4'>
-          <Heading heading='Most Popular Courses' />
-          <SeeAll heading='See all' />
-        </div>
-        <div className='flex  gap-2 px-4'>
-          <CourseSlides CoursesArray={mostPoplularCourses} />
-        </div>
-      </div>
+      <CourseBox
+        heading='Most Popular Courses'
+        CoursesList={mostPoplularCourses}
+      />
+
       {/* saved course */}
-      <div>
-        <div className='mt-5 flex items-center justify-between px-5 py-4'>
-          <Heading heading='Saved Courses' />
-          <SeeAll heading='See all' />
-        </div>
-        <div className='flex gap-4 px-4'>
-          <CourseSlides CoursesArray={savedCourses} />
-        </div>
-      </div>
+      <CourseBox heading='Saved Courses' CoursesList={savedCourses} />
+
       {/* footer */}
       <Footer />
     </div>

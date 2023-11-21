@@ -122,7 +122,7 @@ const SearchPage = () => {
           <SeeAll heading='See all' />
         </div>
         <div className='flex  gap-2'>
-          <CourseSlides CoursesArray={mostPoplularCourses} />
+          <CourseSlides CoursesList={mostPoplularCourses} />
         </div>
       </div>
       {/* Or */}

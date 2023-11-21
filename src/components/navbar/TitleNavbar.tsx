@@ -1,9 +1,16 @@
+import Link from 'next/link';
 import React from 'react';
 import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
 
 import Heading from '@/components/heading/Heading';
 
-const TitleNavbar = ({ title }: { title: string }) => {
+const TitleNavbar = ({
+  title,
+  redirectTo,
+}: {
+  title: string;
+  redirectTo: string;
+}) => {
   return (
     <div className='flex items-center p-[30px]'>
       <button
@@ -11,7 +18,9 @@ const TitleNavbar = ({ title }: { title: string }) => {
         items-center justify-center rounded-md border-2
          border-[#F4F4F4] bg-[#FFFFFF] hover:bg-gray-100 '
       >
-        <MdOutlineKeyboardArrowLeft size={28} />
+        <Link href={`${redirectTo}`}>
+          <MdOutlineKeyboardArrowLeft size={28} />
+        </Link>
       </button>
       <Heading heading={`${title}`} />
     </div>
