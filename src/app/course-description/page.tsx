@@ -23,7 +23,7 @@ const CourseDescription = () => {
 
   return (
     <div className={`${outfit.className}`}>
-      {showPopUp && <ButtonPopup />}
+      {showPopUp && <ButtonPopup setShowPopUp={setShowPopUp} />}
       {/* header */}
       <div
         className={`flex w-full items-center justify-between 
@@ -63,17 +63,9 @@ const CourseDescription = () => {
             UPTSU
           </span>
         </div>
-        <div>
-          <ColoredText
-            textColor='#4ACB5F'
-            backGroundColor='#DAFFDA'
-            text='English'
-          />
-          <ColoredText
-            textColor='#385B8B'
-            backGroundColor='#C7DEFF'
-            text='Hindi'
-          />
+        <div className='flex'>
+          <ColoredText classes='text-[#4ACB5F] bg-[#DAFFDA]' text='English' />
+          <ColoredText classes='text-[#385B8B] bg-[#C7DEFF]' text='Hindi' />
         </div>
         <div className='flex justify-between px-2'>
           <p className='text-[16px] font-semibold leading-6 text-[#272728]	'>

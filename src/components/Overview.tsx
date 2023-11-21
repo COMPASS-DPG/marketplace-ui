@@ -5,7 +5,7 @@ const Overview = () => {
         About Course
       </p>
 
-      <p className='color-[##65758C] py-3 text-[15px] leading-6'>
+      <p className='py-3 text-[15px] leading-6 text-[##65758C]'>
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
         dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia voluptas
         sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt

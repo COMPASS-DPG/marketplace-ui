@@ -48,7 +48,7 @@ const Notifications = () => {
           <p className='text-[16px] font-medium text-[#272728]'>
             {notifications[0].message}
           </p>
-          <p className='text-[13px] font-normal text-slate-500 text-opacity-60'>
+          <p className='mt-1 text-[13px] font-normal text-slate-500 text-opacity-60'>
             Just now
           </p>
         </div>
@@ -60,7 +60,7 @@ const Notifications = () => {
               <p className='text-[16px] font-normal text-[#272728]'>
                 {message}
               </p>
-              <p className='text-[13px] font-normal text-slate-500 text-opacity-60'>
+              <p className='mt-1 text-[13px] font-normal text-slate-500 text-opacity-60'>
                 {date}
               </p>
             </div>

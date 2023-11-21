@@ -22,10 +22,10 @@ const BasicPopup = ({
             <RxCross1 size='24' />
           </div>
           <p className=' mx-5 mb-2 text-[22px] font-semibold leading-7 text-[#272728]'>
-            Communication ipsum dolpoid skills
+            {courseDetails.course_name}
           </p>
 
-          <p className='px-5 py-2 text-[16px] font-normal leading-7  text-[#787878] '>
+          <p className='px-5 py-2 text-[16px] font-normal uppercase leading-7  text-[#787878] '>
             Created by:{' '}
             <span className='font-medium'>{courseDetails.created_by}</span>
           </p>

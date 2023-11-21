@@ -13,18 +13,11 @@ const SwiperDiv = () => {
         pagination={true}
         slidesPerView={1}
       >
-        <SwiperSlide>
-          <SwipeSlide />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwipeSlide />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwipeSlide />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwipeSlide />
-        </SwiperSlide>
+        {[1, 2, 3, 4].map((item) => (
+          <SwiperSlide key={item}>
+            <SwipeSlide />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

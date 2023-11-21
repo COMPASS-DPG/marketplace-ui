@@ -10,7 +10,8 @@ type PropsType = {
   value: string;
   placeholder: string;
   required?: boolean;
-  handleClick?: (value: string) => void;
+  handleClick?: () => void;
+  selectedOptionCount?: number;
 };
 
 const SearchInput = ({
@@ -19,12 +20,10 @@ const SearchInput = ({
   required = false,
   onChange,
   handleClick = () => null,
+  selectedOptionCount,
 }: PropsType) => {
   return (
-    <div
-      onClick={() => handleClick('/search')}
-      className='flex w-[331px] items-center justify-between rounded-full border px-[10px] py-[5px] shadow-md focus-within:border-blue-400 focus-within:ring-blue-400 '
-    >
+    <div className='flex w-[331px]  items-center justify-between rounded-full border px-[10px] py-[5px] shadow-md focus-within:border-blue-400 focus-within:ring-blue-400 '>
       <div>
         <svg
           className='h-4 w-4 text-gray-500 dark:text-gray-400'
@@ -54,8 +53,19 @@ const SearchInput = ({
           onChange={(e) => onChange(e?.target?.value)}
         />
       </div>
-      <div className='pr-3'>
-        {value != '' ? <RxCross1 /> : <Filter width='24px' />}
+      <div className='relative pr-3'>
+        {value != '' ? (
+          <RxCross1 />
+        ) : (
+          <div onClick={() => handleClick()} className='relative inline-block'>
+            {selectedOptionCount != 0 && (
+              <p className=' mb-[-12px]  rounded-full bg-[#FF5A5A] text-center text-[#fff]'>
+                {selectedOptionCount}
+              </p>
+            )}
+            <Filter width='24px' />
+          </div>
+        )}
       </div>
     </div>
   );

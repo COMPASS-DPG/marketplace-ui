@@ -39,21 +39,12 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
           <div className='flex items-center'>
             <EditIcon width='20px' />
             <span
-              className={`${outfit.className} py-1 text-[13px] font-medium text-[#385B8B]  `}
+              className={`${outfit.className} py-1 text-[13px] font-medium uppercase text-[#385B8B]  `}
             >
               {created_by}
             </span>
-            <ColoredText
-              textColor='#4ACB5F'
-              backGroundColor='#DAFFDA'
-              text='English'
-            />
-
-            <ColoredText
-              textColor='#385B8B'
-              backGroundColor='#C7DEFF'
-              text='Hindi'
-            />
+            <ColoredText classes='text-[#4ACB5F] bg-[#DAFFDA]' text='English' />
+            <ColoredText classes='text-[#385B8B] bg-[#C7DEFF]' text='Hindi' />
           </div>
         </div>
         <div className='flex justify-between px-2'>

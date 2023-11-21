@@ -104,7 +104,9 @@ const PurchaseHistory = () => {
                 </p>
               </div>
               <div className='flex justify-between'>
-                <p className='pt-2 text-xs text-[#697B7A]'>{author}</p>
+                <p className='pt-2 text-xs uppercase text-[#697B7A]'>
+                  {author}
+                </p>
                 <p className='pt-2 text-xs text-[#697B7A]'>{date}</p>
               </div>
 

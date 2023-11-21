@@ -110,12 +110,15 @@ const MarketPlace = () => {
           Let’s Improve Your{' '}
           <span className='font-semibold text-[#385B8B]'>Competency!</span>
         </p>
-        <div className='rounded-3xl pb-7 pt-4 '>
+        {/* serach bar */}
+        <div
+          className='rounded-3xl pb-7 pt-4 '
+          onClick={() => handleClick('/search')}
+        >
           <SearchInput
             value={input}
             onChange={setInput}
             placeholder='Search your course...'
-            handleClick={handleClick}
           />
         </div>
         <div className='flex items-center justify-between'>
@@ -154,7 +157,7 @@ const MarketPlace = () => {
           <Heading heading='Saved Courses' />
           <SeeAll heading='See all' />
         </div>
-        <div className='flex  gap-2 px-4'>
+        <div className='flex gap-4 px-4'>
           <CourseSlides CoursesArray={savedCourses} />
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BsFillBookmarkFill, BsShare } from 'react-icons/bs';
@@ -58,14 +57,9 @@ const CourseDescription = () => {
         className={`flex w-full items-center justify-between 
        p-5 text-2xl font-semibold text-[#65758C]`}
       >
-        <Link href='/recommended-courses'>
-          <div
-            className='border-neutural-100 rounded-lg border'
-            onClick={goBack}
-          >
-            <MdOutlineKeyboardArrowLeft width='24px' className=' m-2' />
-          </div>
-        </Link>
+        <div className='border-neutural-100 rounded-lg border' onClick={goBack}>
+          <MdOutlineKeyboardArrowLeft width='24px' className=' m-2' />
+        </div>
         <div className='flex items-center justify-center gap-5'>
           <div className='border-neutural-100 rounded-lg border'>
             {/* <BsBookmark width='24px' className=' m-2' /> */}
@@ -98,19 +92,11 @@ const CourseDescription = () => {
             {courseDetails.created_by}
           </span>
         </div>
-        <div>
-          <ColoredText
-            textColor='#4ACB5F'
-            backGroundColor='#DAFFDA'
-            text='English'
-          />
-          <ColoredText
-            textColor='#385B8B'
-            backGroundColor='#C7DEFF'
-            text='Hindi'
-          />
+        <div className='my-1 flex'>
+          <ColoredText classes='text-[#4ACB5F] bg-[#DAFFDA]' text='English' />
+          <ColoredText classes='text-[#385B8B] bg-[#C7DEFF]' text='Hindi' />
         </div>
-        <div className='flex justify-between px-2'>
+        <div className='flex justify-between'>
           <p className='text-[16px] font-semibold leading-6 text-[#272728]	'>
             Cr.100
           </p>

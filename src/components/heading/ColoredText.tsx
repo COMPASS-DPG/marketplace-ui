@@ -1,18 +1,6 @@
-const ColoredText = ({
-  textColor,
-  backGroundColor,
-  text,
-}: {
-  textColor: string;
-  backGroundColor: string;
-  text: string;
-}) => {
+const ColoredText = ({ text, classes }: { text: string; classes: string }) => {
   return (
-    <span
-      className={`mx-1 rounded-md bg-[${backGroundColor}] px-2 text-[12px] font-normal text-[${textColor}]`}
-    >
-      {text}
-    </span>
+    <div className={`mx-1 rounded-md px-2 text-[12px] ${classes}`}>{text}</div>
   );
 };
 export default ColoredText;

@@ -7,7 +7,7 @@ import { CourseType } from '../../app/marketplace/page';
 
 const CourseSlides = ({ CoursesArray }: { CoursesArray: CourseType[] }) => {
   return (
-    <Swiper spaceBetween={-30} slidesPerView={1}>
+    <Swiper spaceBetween={-10} slidesPerView={1}>
       {CoursesArray.map((course) => {
         return (
           <SwiperSlide key={course.id}>
