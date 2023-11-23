@@ -13,21 +13,21 @@ const getEmptyValue = () => {
     {
       id: 1,
       amount: -50,
-      course_name: 'Software Engineering',
+      title: 'Software Engineering',
       author: 'Author 18',
       date: '2023-11-17',
     },
     {
       id: 2,
       amount: -60,
-      course_name: 'Project Management',
+      title: 'Project Management',
       author: 'Author 20',
       date: '2023-11-19',
     },
     {
       id: 3,
       amount: -25,
-      course_name: 'Digital Illustration',
+      title: 'Digital Illustration',
       author: 'Author 22',
       date: '2023-11-21',
     },
@@ -36,7 +36,7 @@ const getEmptyValue = () => {
 type TransectionType = {
   id: number;
   amount: number;
-  course_name: string;
+  title: string;
   author: string;
   date: string;
 };
@@ -47,16 +47,37 @@ const PurchaseHistory = () => {
     getEmptyValue()
   );
 
-  const fetchTransections = () => {
-    axios.get('http://localhost:3000/wallet').then((response) => {
-      const data = response.data;
-      setBalance(data.main_wallet_balance);
-      setTransections(data.transactions);
-    });
+  // const fetchTransections = () => {
+  //   axios.get('http://localhost:3000/wallet').then((response) => {
+  //     const data = response.data;
+  //     setBalance(data.main_wallet_balance);
+  //     setTransections(data.transactions);
+  //   });
+  // };
+  const consumerId = '123e4567-e89b-42d3-a456-556642440001';
+  const fetchCredits = async () => {
+    const url = `http://localhost:4000/api/consumer/${consumerId}/wallet/credits`;
+
+    const response = await axios.get(url);
+    setBalance(response?.data?.data?.credits);
+  };
+  const fetchPurchaseHistory = async () => {
+    const purchaseHistoryUrl = `http://localhost:4000/api/consumer/${consumerId}/course/purchases`;
+
+    const response = await axios.get(purchaseHistoryUrl);
+    const data = response?.data?.data?.consumerCourses || [];
+    // console.log(
+    //   data[0].id,
+    //   data[0].CourseInfo.title,
+    //   data[0].CourseInfo.credits,
+    //   'data'
+    // );
+    setTransections(data);
   };
 
   useEffect(() => {
-    fetchTransections();
+    fetchCredits();
+    fetchPurchaseHistory();
   }, []);
 
   return (
@@ -91,13 +112,13 @@ const PurchaseHistory = () => {
       {/* transection details */}
       <div className='m-5 ml-4'>
         {transections.map((transection: TransectionType) => {
-          const { amount, id, course_name, author, date } = transection;
+          const { amount, id, title, author, date } = transection;
 
           return (
             <div key={id}>
               <div className='flex  items-center justify-between'>
                 <p className='w-[260px] text-[16px] font-medium text-[#272728]'>
-                  {course_name}
+                  {title}
                 </p>
                 <p className='text-base font-semibold text-[#ED672B]'>
                   {amount}
