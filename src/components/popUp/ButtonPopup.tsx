@@ -2,8 +2,10 @@ import ButtonFill from '@/components/buttons/ButtonFill';
 
 const ButtonPopup = ({
   setShowPopUp,
+  purchaseCourse,
 }: {
   setShowPopUp: (value: boolean) => void;
+  purchaseCourse: () => void;
 }) => {
   return (
     <div className='fixed inset-0 z-50 flex'>
@@ -28,7 +30,7 @@ const ButtonPopup = ({
               Close
             </ButtonFill>
             <ButtonFill
-              onClick={() => setShowPopUp(false)}
+              onClick={() => purchaseCourse()}
               classes='w-[140px] h-[36px] bg-[#385B8B] text-[#fff]'
             >
               Confirm

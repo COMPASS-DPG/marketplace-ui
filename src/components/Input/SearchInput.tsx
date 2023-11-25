@@ -22,6 +22,12 @@ const SearchInput = ({
   handleClick = () => null,
   selectedOptionCount,
 }: PropsType) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleClick();
+    }
+  };
+
   return (
     <div className='flex w-[331px]  items-center justify-between rounded-full border px-[10px] py-[5px] shadow-md focus-within:border-blue-400 focus-within:ring-blue-400 '>
       <div>
@@ -51,6 +57,7 @@ const SearchInput = ({
           required={required}
           value={value}
           onChange={(e) => onChange(e?.target?.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
       <div className='relative pr-3'>

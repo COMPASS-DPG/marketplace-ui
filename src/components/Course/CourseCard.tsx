@@ -4,16 +4,15 @@ import Link from 'next/link';
 
 import { outfit } from '@/components/FontFamily';
 
+import { CourseType } from '@/app/context/MarketPlaceUserContext';
+
 import ColoredText from '../heading/ColoredText';
-import { CourseType } from '../../app/marketplace/page';
 import CourseImage from '../../../public/images/courseImage.png';
 
 import { EditIcon, Star } from '~/svg';
 const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
-  const { id, course_name, competency, created_by, credit_rating } =
-    courseDetails;
   return (
-    <Link href={`/course-description/${id}`}>
+    <Link href={`/course-description/${courseDetails?.courseId}`}>
       <div
         className={`h-[156px] w-[311px] rounded-2xl border bg-white shadow ${outfit.className}`}
       >
@@ -23,15 +22,19 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
             <p
               className={`w-[211px] ${outfit.className} text-[15px] font-bold text-zinc-800`}
             >
-              {course_name}
+              {courseDetails?.title}
             </p>
-            <p
+            <div
               className={`w-[211px] ${outfit.className} text-[13px] font-normal text-neutral-500`}
             >
-              {competency.map((competency, index) => {
-                return <div key={index}>{competency}</div>;
-              })}
-            </p>
+              {Object.keys(courseDetails?.competency || {}).map(
+                (key, index) => (
+                  <div key={index}>
+                    <p className='font-semibold'>{key}</p>
+                  </div>
+                )
+              )}
+            </div>
           </div>
           {/* Icon and language list */}
         </div>
@@ -41,7 +44,7 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
             <span
               className={`${outfit.className} py-1 text-[13px] font-medium uppercase text-[#385B8B]  `}
             >
-              {created_by}
+              {courseDetails?.created_by}
             </span>
             <ColoredText classes='text-[#4ACB5F] bg-[#DAFFDA]' text='English' />
             <ColoredText classes='text-[#385B8B] bg-[#C7DEFF]' text='Hindi' />
@@ -49,10 +52,10 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
         </div>
         <div className='flex justify-between px-2'>
           <p className='text-[16px] font-semibold leading-6 text-[#272728]	'>
-            Cr.100
+            {courseDetails?.credits}
           </p>
           <p className='flex items-center text-[12px] font-bold text-[#787878]'>
-            {credit_rating}
+            {courseDetails?.avgRating || '-'}
             <span className='pl-0.5'>
               <Star width='12px' />
             </span>

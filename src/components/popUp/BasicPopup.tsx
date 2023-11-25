@@ -1,6 +1,7 @@
 import { RxCross1 } from 'react-icons/rx';
 
-import { CourseType } from '@/app/marketplace/page';
+import { CourseType } from '@/app/context/MarketPlaceUserContext';
+
 const BasicPopup = ({
   setDetailsPopUp,
   courseDetails,
@@ -22,20 +23,19 @@ const BasicPopup = ({
             <RxCross1 size='24' />
           </div>
           <p className=' mx-5 mb-2 text-[22px] font-semibold leading-7 text-[#272728]'>
-            {courseDetails.course_name}
+            {courseDetails?.title}
           </p>
 
           <p className='px-5 py-2 text-[16px] font-normal uppercase leading-7  text-[#787878] '>
             Created by:{' '}
-            <span className='font-medium'>{courseDetails.created_by}</span>
+            <span className='font-medium'>{courseDetails?.created_by}</span>
           </p>
           <p className='px-5  py-2 text-[16px] font-normal leading-7 text-[#787878] '>
-            Author:{' '}
-            <span className='font-medium'>{courseDetails.created_by}</span>
+            Author: <span className='font-medium'>{courseDetails?.author}</span>
           </p>
           <p className='px-5 py-2  text-[16px] font-normal leading-7 text-[#787878] '>
             Last Updated On:{' '}
-            <span className='font-medium'>{courseDetails.last_updated_on}</span>
+            <span className='font-medium'>{courseDetails?.lastUpdatedOn}</span>
           </p>
         </div>
       </div>

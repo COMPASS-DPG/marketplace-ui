@@ -1,38 +1,18 @@
 import SingleCompetency from '@/components/course-description/SingleCompetency';
 
-const competencies = [
-  {
-    key: 1,
-    name: 'Pregnancy Identification',
-    levels: [
-      'Understands health of males and females and initial assessment protocols',
-      'Identifies pregnancy using Nischaya Kit',
-    ],
-  },
-  {
-    key: 3,
-    name: 'Pregnancy Identification',
-    levels: [
-      'Understands health of males and females and initial assessment protocols',
-      'Identifies pregnancy using Nischaya Kit',
-    ],
-  },
-  {
-    key: 2,
-    name: 'Pregnancy Identification',
-    levels: [
-      'Understands health of males and females and initial assessment protocols',
-      'Identifies pregnancy using Nischaya Kit',
-    ],
-  },
-];
+type CompetencyType = {
+  [key: string]: string[];
+};
 
-const Competencies = () => {
+const Competencies = ({ competency }: { competency: CompetencyType }) => {
   return (
     <div className='py-4 '>
-      {competencies.map((competency) => {
+      {Object.keys(competency).map((key, index) => {
         return (
-          <SingleCompetency key={competency.key} competency={competency} />
+          <SingleCompetency
+            key={index}
+            competency={{ key: index, name: key, levels: competency[key] }}
+          />
         );
       })}
     </div>

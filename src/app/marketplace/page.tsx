@@ -1,7 +1,6 @@
 'use client';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import 'swiper/css';
 
 import CourseBox from '@/components/Course/CourseBox';
@@ -12,89 +11,14 @@ import SearchInput from '@/components/Input/SearchInput';
 import Footer from '@/components/navbar/Footer';
 import SwiperDiv from '@/components/SwiperDiv';
 
-export const getInitialValue = () => {
-  return [
-    {
-      id: 1,
-      course_name: 'Introduction to Programming',
-      competency: ['Problem Solving', 'Coding Skills'],
-      created_by: 'Author 1',
-      last_updated_on: '2023-10-31',
-      credit_rating: 4,
-      language_of_array: ['One', 'Two', 'Three'],
-      img: '../../../public/images/courseImage.png',
-    },
-    {
-      id: 2,
-      course_name: 'Web Development Basics',
-      competency: ['HTML', 'CSS'],
-      created_by: 'Author 2',
-      last_updated_on: '2023-10-30',
-      credit_rating: 3,
-      language_of_array: ['One', 'Three'],
-      img: '../../../public/images/courseImage.png',
-    },
-    {
-      id: 3,
-      course_name: 'Data Science Fundamentals',
-      competency: ['Data Analysis', 'Machine Learning'],
-      created_by: 'Author 3',
-      last_updated_on: '2023-10-29',
-      credit_rating: 5,
-      language_of_array: ['Two', 'Three'],
-      img: '../../../public/images/courseImage.png',
-    },
-  ];
-};
-
-export type CourseType = {
-  id: number;
-  course_name: string;
-  competency: string[];
-  created_by: string;
-  last_updated_on: string;
-  credit_rating: number;
-  language_of_array: string[];
-  img: string;
-};
+import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
 
 const MarketPlace = () => {
+  const { savedCourses, mostPopularCourses, recommendedCourses } =
+    useMarketPlaceContext();
   const router = useRouter();
 
   const [input, setInput] = useState<string>('');
-  const [recommendedCourses, setRecommendedCourses] = useState<CourseType[]>(
-    getInitialValue()
-  );
-  const [mostPoplularCourses, setmostPoplularCourses] = useState<CourseType[]>(
-    getInitialValue()
-  );
-  const [savedCourses, setSavedCourses] = useState<CourseType[]>(
-    getInitialValue()
-  );
-
-  const handleSearch = () => {
-    // Define the URLs for the three types of data
-    const recommendedUrl = 'http://localhost:3000/recommanded';
-    const popularUrl = 'http://localhost:3000/popular';
-    const savedUrl = 'http://localhost:3000/saved';
-
-    // Fetch the recommended courses using Axios
-    axios
-      .get(recommendedUrl)
-      .then((response) => setRecommendedCourses(response.data));
-
-    // Fetch the most popular courses using Axios
-    axios
-      .get(popularUrl)
-      .then((response) => setmostPoplularCourses(response.data));
-
-    // Fetch the saved courses using Axios
-    axios.get(savedUrl).then((response) => setSavedCourses(response.data));
-  };
-
-  useEffect(() => {
-    handleSearch();
-  }, []);
 
   const handleClick = (value: string) => {
     router.push(value);
@@ -137,9 +61,8 @@ const MarketPlace = () => {
       {/* most popular course */}
       <CourseBox
         heading='Most Popular Courses'
-        CoursesList={mostPoplularCourses}
+        CoursesList={mostPopularCourses}
       />
-
       {/* saved course */}
       <CourseBox heading='Saved Courses' CoursesList={savedCourses} />
 

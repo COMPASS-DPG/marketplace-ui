@@ -2,7 +2,7 @@ import CourseSlides from '@/components/Course/CourseSlides';
 import Heading from '@/components/heading/Heading';
 import SeeAll from '@/components/heading/SeeAll';
 
-import { CourseType } from '@/app/marketplace/page';
+import { CourseType } from '@/app/context/MarketPlaceUserContext';
 
 const CourseBox = ({
   heading,

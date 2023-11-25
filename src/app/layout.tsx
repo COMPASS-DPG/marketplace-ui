@@ -1,10 +1,13 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
+import 'react-toastify/dist/ReactToastify.css';
 
+import ContextWrapper from '@/app/context/ContextWrapper';
 import { siteConfig } from '@/constant/config';
 
 // !STARTERCONF Change these default meta
@@ -54,8 +57,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>{children}</body>
-    </html>
+    <ContextWrapper>
+      <html>
+        <body>
+          {children}
+          <ToastContainer
+            position='top-right'
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme='colored'
+          />
+        </body>
+      </html>
+    </ContextWrapper>
   );
 }

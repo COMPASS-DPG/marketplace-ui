@@ -2,15 +2,18 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
+import { toast } from 'react-toastify';
 
-import CourseSlides from '@/components/Course/CourseSlides';
+import CourseBox from '@/components/Course/CourseBox';
 import FilterPage from '@/components/FilterPage';
-import Heading from '@/components/heading/Heading';
-import SeeAll from '@/components/heading/SeeAll';
 import SearchInput from '@/components/Input/SearchInput';
 import SearchTopbar from '@/components/navbar/SearchTopbar';
 
-import { getInitialValue } from '@/app/marketplace/page';
+import {
+  CourseType,
+  useMarketPlaceContext,
+} from '@/app/context/MarketPlaceUserContext';
+import { getFilterCourse } from '@/services/marketplaceServices';
 
 import { NotFound } from '~/svg';
 
@@ -33,11 +36,12 @@ export type filterObjType = {
 };
 
 const SearchPage = () => {
+  const { mostPopularCourses } = useMarketPlaceContext();
+  const [filterCourse, setFilterCourse] = useState<CourseType[]>([]);
   const [input, setInput] = useState<string>('');
   const [filterObj, setFilterObj] = useState<filterObjType>(getInitialValue2());
-  const [mostPoplularCourses, setMostPoplularCourses] = useState(
-    getInitialValue()
-  );
+  const [showMostPopularCourses, setShowMostPopularCourses] =
+    useState<boolean>(true);
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string[]>([]);
 
@@ -67,12 +71,18 @@ const SearchPage = () => {
   };
 
   // open filter page
-  const handleFiterButton = () => {
-    setFilterOpen(true);
+  const handleFiterButton = async () => {
+    try {
+      const response = await getFilterCourse(input);
+      setFilterCourse(response);
+      setShowMostPopularCourses(false);
+    } catch (error) {
+      toast.error('something went wrong in filter');
+    }
   };
   useEffect(() => {
     // fetch the most popular course
-    setMostPoplularCourses([]);
+    // setMostPopularCourses([]);
   }, []);
 
   if (isFilterOpen) {
@@ -116,37 +126,29 @@ const SearchPage = () => {
       )}
 
       {/* either */}
-      <div>
-        <div className='mb-2 mt-7  flex items-center justify-between pb-4 pr-5'>
-          <Heading heading='Most Popular Courses' />
-          <SeeAll heading='See all' />
+      {showMostPopularCourses ? (
+        <CourseBox
+          heading='Most Popular Courses'
+          CoursesList={mostPopularCourses}
+        />
+      ) : filterCourse.length != 0 ? (
+        <CourseBox heading='Related Results' CoursesList={filterCourse} />
+      ) : (
+        <div className='py-10'>
+          <div className='flex justify-center'>
+            <NotFound width='200px' height='162px' />
+          </div>
+          <div className='mx-5 text-center'>
+            <p className='#272728 text-xl font-semibold text-[#272728]'>
+              Search not found
+            </p>
+            <p className='#65758C text-sm font-normal text-[#272728]'>
+              Please activate the property name search service that is available
+              correctly
+            </p>
+          </div>
         </div>
-        <div className='flex  gap-2'>
-          <CourseSlides CoursesList={mostPoplularCourses} />
-        </div>
-      </div>
-      {/* Or */}
-      <div>
-        <div className='mt-5 flex items-center justify-between  py-4 pr-5'>
-          <Heading heading='Related Results' />
-        </div>
-        <div className='flex  gap-2'>{/* <CouseCard /> */}</div>
-      </div>
-      {/* nothing is present */}
-      <div className='py-10'>
-        <div className='flex justify-center'>
-          <NotFound width='200px' height='162px' />
-        </div>
-        <div className='mx-5 text-center'>
-          <p className='#272728 text-xl font-semibold text-[#272728]'>
-            Search not found
-          </p>
-          <p className='#65758C text-sm font-normal text-[#272728]'>
-            Please activate the property name search service that is available
-            correctly
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
