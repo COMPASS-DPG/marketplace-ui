@@ -22,7 +22,6 @@ const getInitialValue2 = () => {
     courseProviders: [],
     language: [],
     sortBy: '',
-    duration: '',
   };
 };
 
@@ -31,7 +30,6 @@ export type filterObjType = {
   courseProviders: string[];
   language: string[];
   sortBy: string;
-  duration: string;
 };
 
 export type optionType = {
@@ -61,8 +59,7 @@ const SearchPage = () => {
 
   // handle filter button
   const SearchFilterOptions = () => {
-    const { competencies, courseProviders, language, sortBy, duration } =
-      filterObj;
+    const { competencies, courseProviders, language, sortBy } = filterObj;
     setSelectedOption([]);
     if (competencies.length)
       setSelectedOption((prev) => [
@@ -78,9 +75,6 @@ const SearchPage = () => {
       setSelectedOption((prev) => [...prev, `${language.length} language`]);
     if (sortBy) {
       setSelectedOption((prev) => [...prev, sortBy]);
-    }
-    if (duration) {
-      setSelectedOption((prev) => [...prev, duration]);
     }
   };
 

@@ -91,16 +91,6 @@ const FilterCourse = ({
         />
       </div>
 
-      {/*duration*/}
-      <div className='mb-5 mt-3 w-[335px]'>
-        <label className='text-[16px] font-medium leading-6'>Duration</label>
-        <MultipleButton
-          options={['<1 Hrs', '1-2 Hrs', '>2Hrs']}
-          onClick={(val: string) => handleChange('duration', val)}
-          value={filterObj.duration}
-        />
-      </div>
-
       <div>
         <ButtonFill
           onClick={handleFilterButton}
