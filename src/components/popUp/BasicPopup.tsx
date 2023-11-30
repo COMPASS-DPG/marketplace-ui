@@ -1,14 +1,20 @@
 import { RxCross1 } from 'react-icons/rx';
 
-import { CourseType } from '@/app/context/MarketPlaceUserContext';
+import { SingleCourseType } from '@/app/course-description/[id]/page';
 
 const BasicPopup = ({
   setDetailsPopUp,
   courseDetails,
 }: {
   setDetailsPopUp: (value: boolean) => void;
-  courseDetails: CourseType;
+  courseDetails: SingleCourseType;
 }) => {
+  const purchasedDate = new Date(courseDetails?.updatedAt);
+  const formattedDate = purchasedDate.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
   return (
     <div className='fixed inset-0 z-50 flex'>
       <div className='backdrop-blur-{none} absolute  inset-0  bg-black bg-opacity-50'></div>
@@ -28,14 +34,14 @@ const BasicPopup = ({
 
           <p className='px-5 py-2 text-[16px] font-normal uppercase leading-7  text-[#787878] '>
             Created by:{' '}
-            <span className='font-medium'>{courseDetails?.created_by}</span>
+            <span className='font-medium'>{courseDetails?.providerName}</span>
           </p>
           <p className='px-5  py-2 text-[16px] font-normal leading-7 text-[#787878] '>
             Author: <span className='font-medium'>{courseDetails?.author}</span>
           </p>
           <p className='px-5 py-2  text-[16px] font-normal leading-7 text-[#787878] '>
             Last Updated On:{' '}
-            <span className='font-medium'>{courseDetails?.lastUpdatedOn}</span>
+            <span className='font-medium'>{formattedDate}</span>
           </p>
         </div>
       </div>

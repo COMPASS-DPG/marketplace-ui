@@ -4,21 +4,21 @@ import Link from 'next/link';
 
 import { outfit } from '@/components/FontFamily';
 
-import { CourseType } from '@/app/context/MarketPlaceUserContext';
+import { SingleCourseType } from '@/app/course-description/[id]/page';
 
 import ColoredText from '../heading/ColoredText';
 import CourseImage from '../../../public/images/courseImage.png';
 
 import { EditIcon, Star } from '~/svg';
-const CourseCard = ({
+const RelatedCourseCard = ({
   courseDetails,
   width = '311px',
 }: {
-  courseDetails: CourseType;
+  courseDetails: SingleCourseType;
   width?: string;
 }) => {
   return (
-    <Link href={`/course-description/${courseDetails?.courseId}`}>
+    <Link href={`/course-description/${courseDetails?.id}`}>
       <div
         className={`h-[156px] w-[${width}] rounded-2xl border bg-white shadow ${outfit.className}`}
       >
@@ -87,4 +87,4 @@ const CourseCard = ({
     </Link>
   );
 };
-export default CourseCard;
+export default RelatedCourseCard;

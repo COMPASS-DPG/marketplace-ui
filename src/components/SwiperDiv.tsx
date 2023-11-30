@@ -4,7 +4,10 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import SwipeSlide from '@/components/SwipeSlide';
+
+import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
 const SwiperDiv = () => {
+  const { ongoingCourses } = useMarketPlaceContext();
   return (
     <div>
       <Swiper
@@ -13,9 +16,9 @@ const SwiperDiv = () => {
         pagination={true}
         slidesPerView={1}
       >
-        {[1, 2, 3, 4].map((item) => (
-          <SwiperSlide key={item}>
-            <SwipeSlide />
+        {ongoingCourses?.map((course, index) => (
+          <SwiperSlide key={index}>
+            <SwipeSlide course={course} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 
 import { Filter } from '~/svg';
@@ -9,21 +9,25 @@ type PropsType = {
   onChange: (value: string) => void;
   value: string;
   placeholder: string;
-  required?: boolean;
-  handleClick?: () => void;
+  handleClick: () => void;
   selectedOptionCount?: number;
+  handleCrossIcon: () => void;
+  handleFilterIcon: () => void;
 };
 
 const SearchInput = ({
   value,
   placeholder,
-  required = false,
   onChange,
   handleClick = () => null,
   selectedOptionCount,
+  handleCrossIcon,
+  handleFilterIcon,
 }: PropsType) => {
+  const [showCross, setShowCross] = useState(false);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      setShowCross(false);
       handleClick();
     }
   };
@@ -54,23 +58,34 @@ const SearchInput = ({
         bg-white py-2.5 pl-2 pr-[70px] text-sm text-gray-900 placeholder:font-medium placeholder:text-[#909090]
         focus:ring-0 `}
           placeholder={placeholder}
-          required={required}
           value={value}
-          onChange={(e) => onChange(e?.target?.value)}
+          onChange={(e) => {
+            onChange(e?.target?.value), setShowCross(true);
+          }}
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className='relative pr-3'>
-        {value != '' ? (
-          <RxCross1 />
+      <div className='relative pr-3 pt-2'>
+        {value != '' && showCross ? (
+          <div
+            onClick={() => handleCrossIcon()}
+            className='relative inline-block'
+          >
+            <RxCross1 />
+          </div>
         ) : (
-          <div onClick={() => handleClick()} className='relative inline-block'>
+          <div
+            onClick={() => handleFilterIcon()}
+            className='relative inline-block'
+          >
             {selectedOptionCount != 0 && (
-              <p className=' mb-[-12px]  rounded-full bg-[#FF5A5A] text-center text-[#fff]'>
+              <p className='absolute right-0 top-[-4px] z-10 mb-[-12px] rounded-full bg-[#FF5A5A] px-[6px] text-center text-[#fff]'>
                 {selectedOptionCount}
               </p>
             )}
-            <Filter width='24px' />
+            <div>
+              <Filter width='30px' />
+            </div>
           </div>
         )}
       </div>

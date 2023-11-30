@@ -6,14 +6,20 @@ import { useEffect, useState } from 'react';
 import CourseCard from '@/components/Course/CourseCard';
 import TitleNavbar from '@/components/navbar/TitleNavbar';
 
+import Spinner from '@/app/components/Spinner';
 import {
   CourseType,
   useMarketPlaceContext,
 } from '@/app/context/MarketPlaceUserContext';
 
 const Courses = () => {
-  const { savedCourses, mostPopularCourses, recommendedCourses } =
-    useMarketPlaceContext();
+  const {
+    savedCourses,
+    mostPopularCourses,
+    recommendedCourses,
+    loading,
+    error,
+  } = useMarketPlaceContext();
   const useParam = useSearchParams();
 
   const [currentCourses, setCurrentCourses] = useState<CourseType[]>([]);
@@ -34,12 +40,33 @@ const Courses = () => {
   }, [recommendedCourses, mostPopularCourses, savedCourses, useParam]);
   return (
     <div>
-      <TitleNavbar title={currentTitle} redirectTo='/marketplace' />
-      <div className='flex w-full flex-col items-center gap-5'>
-        {currentCourses.map((course) => {
-          return <CourseCard key={course?.courseId} courseDetails={course} />;
-        })}
-      </div>
+      {loading && (
+        <div className='mt-[100px] text-center'>
+          <Spinner />
+        </div>
+      )}
+      {error && (
+        <div className='mt-[100px] text-center text-[16px] font-medium text-[#272728]'>
+          Error...
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div>
+          <TitleNavbar title={currentTitle} />
+          <div className='flex flex-col gap-5 pl-5'>
+            {currentCourses.map((course) => {
+              return (
+                <CourseCard
+                  key={course?.courseId}
+                  courseDetails={course}
+                  width='331px'
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

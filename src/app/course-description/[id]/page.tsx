@@ -16,26 +16,81 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
-  CourseType,
-  getInitialValue,
-} from '@/app/context/MarketPlaceUserContext';
-import { fetchSingleCourse } from '@/services/marketplaceServices';
+  fetchSingleCourse,
+  purchasesACourse,
+  saveACourse,
+  unsaveACourse,
+} from '@/services/marketplaceServices';
 
 import CourseFullImage from '../../../../public/images/courseFullImage.png';
+
+export const getSingleCourseValue = (): SingleCourseType => {
+  return {
+    id: 1,
+    title: 'Introduction to Programming',
+    competency: {
+      'Pregnancy Identification': [
+        'Understands health of males and females and initial assessment protocols',
+        'Identifies pregnancy using Nischaya Kit',
+      ],
+      'Pregnancy Identification 2': [
+        'Understands health of males and females and initial assessment protocols',
+        'Identifies pregnancy using Nischaya Kit',
+      ],
+      'Pregnancy Identification 3': [
+        'Understands health of males and females and initial assessment protocols',
+        'Identifies pregnancy using Nischaya Kit',
+      ],
+    },
+    avgRating: 4,
+    credits: 100,
+    language: ['One', 'Two', 'Three'],
+    imgLink: '../../../public/images/courseImage.png',
+    courseLink: '../../../public/images/courseImage.png',
+    duration: 2,
+    description:
+      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia volupta sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt mollit anim id essed quia consequuntur maExcepteur sint occaecat  cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
+    author: 'dummyAuthore',
+    updatedAt: '24-aug-2024',
+    providerName: 'Dummy Provider',
+    numOfUsers: 47,
+    providerId: '123e4567-e89b-42d3-a456-556642440011',
+  };
+};
+
+export type SingleCourseType = {
+  id: number;
+  title: string;
+  description: string;
+  courseLink: string;
+  imgLink: string;
+  credits: number;
+  language: string[];
+  duration: number;
+  competency: {
+    [key: string]: string[];
+  };
+  author: string;
+  avgRating: number;
+  updatedAt: string;
+  providerName: string;
+  numOfUsers: number;
+  providerId: string;
+};
 
 import { EditIcon, Star } from '~/svg';
 
 const CourseDescription = () => {
+  const userId = localStorage.getItem('userId') ?? '';
   const router = useRouter();
   const { id } = useParams();
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
   const [isSavedCourse, setIsSavedCourse] = useState<boolean>(false);
-  const [courseDetails, setCourseDetails] = useState<CourseType>(
-    getInitialValue()[0]
-  );
-
+  const [courseDetails, setCourseDetails] =
+    useState<SingleCourseType>(getSingleCourseValue);
+  //share course button
   const handleShareClick = async () => {
     if (navigator.share) {
       await navigator.share({
@@ -61,20 +116,64 @@ const CourseDescription = () => {
     fetchDetails();
   }, [id]);
 
-  const purchaseCourse = () => {
-    // make api request to confirst the perchase and redirect user to the Purchase course
-    //once the course provider is availabel
-    setShowPopUp(false);
-  };
+  const purchaseCourse = async () => {
+    try {
+      const payload = {
+        courseId: courseDetails?.id,
+        bppId: 'xyz',
+        title: courseDetails?.title,
+        description: courseDetails?.description,
+        credits: courseDetails?.credits,
+        imageLink: courseDetails?.imgLink,
+        language: courseDetails?.language,
+        courseLink: courseDetails?.courseLink,
+        providerName: courseDetails?.providerName,
+        avgRating: courseDetails?.avgRating,
+        competency: courseDetails?.competency,
+        providerId: courseDetails?.providerId,
+      };
+      await purchasesACourse(userId, payload);
+      router.push('/ongoing-courses');
+      //  setLoading(false);
+    } catch (error) {
+      toast.error('something went wrong');
+      // Handle any errors that occur during the API call
+      // eslint-disable-next-line no-console
+      console.error('API call error:', error);
 
-  const handleSavedIconClick = () => {
-    if (isSavedCourse) {
-      //call api here to save the course once the course Provider is available
-      setIsSavedCourse(false);
-    } else {
-      //call api here to save the course once the course Provider is available
-      // also check lang item
-      setIsSavedCourse(true);
+      setShowPopUp(false);
+    }
+  };
+  const handleSavedIconClick = async () => {
+    try {
+      if (isSavedCourse) {
+        await unsaveACourse(userId, parseInt(Array.isArray(id) ? id[0] : id));
+        setIsSavedCourse(false);
+        toast.success('course unsaved successfully');
+      } else {
+        const payload = {
+          courseId: courseDetails?.id,
+          bppId: 'xyz',
+          title: courseDetails?.title,
+          description: courseDetails?.description,
+          credits: courseDetails?.credits,
+          imageLink: courseDetails?.imgLink,
+          language: courseDetails?.language,
+          courseLink: courseDetails?.courseLink,
+          providerName: courseDetails?.providerName,
+          avgRating: courseDetails?.avgRating,
+          competency: courseDetails?.competency,
+        };
+
+        await saveACourse(userId, payload);
+        toast.success('course saved successfully');
+        setIsSavedCourse(true);
+      }
+    } catch (error) {
+      toast.error('something went wrong');
+      // Handle any errors that occur during the API call
+      // eslint-disable-next-line no-console
+      console.error('API call error:', error);
     }
   };
 
@@ -137,26 +236,35 @@ const CourseDescription = () => {
           {courseDetails?.title}
         </p>
         <div
-          className='flex items-center gap-1'
+          className='my-1 flex items-center gap-1'
           onClick={() => setDetailsPopUp(true)}
         >
           <EditIcon width='22px' />
           <span
             className={`${outfit.className} py-1 text-[15px] font-medium uppercase text-[#385B8B]  `}
           >
-            {courseDetails?.created_by}
+            {courseDetails?.providerName || 'DUMMY PROVIDER'}
           </span>
         </div>
-        <div className='my-1 flex'>
-          <ColoredText classes='text-[#4ACB5F] bg-[#DAFFDA]' text='English' />
-          <ColoredText classes='text-[#385B8B] bg-[#C7DEFF]' text='Hindi' />
+        <div className='my-1 flex gap-1'>
+          {courseDetails?.language?.map((item, index) => (
+            <ColoredText
+              key={index}
+              text={item.charAt(0).toUpperCase() + item.slice(1)}
+              classes={`${
+                index % 2 == 0
+                  ? 'bg-[#DAFFDA] text-[#4ACB5F]'
+                  : 'bg-[#C7DEFF] text-[#385B8B]'
+              }`}
+            />
+          ))}
         </div>
         <div className='flex justify-between'>
           <p className='text-[16px] font-semibold leading-6 text-[#272728]	'>
             Cr. {courseDetails.credits}
           </p>
           <p className='flex items-center text-[15px] font-bold text-[#787878]'>
-            {courseDetails?.avgRating}
+            {courseDetails?.avgRating ?? '--'}
             <span className='pl-0.5'>
               <Star width='12px' />
             </span>
@@ -166,7 +274,7 @@ const CourseDescription = () => {
       {/* member tab */}
       <div className='flex items-center gap-1 px-5 text-[16px] text-[#65758C]'>
         <GoPeople />
-        <p>121 Members</p>
+        <p>{courseDetails?.numOfUsers} Members</p>
       </div>
       <hr className='mb-5 mt-4 h-[1px] text-[#F4F4F4]' />
       {/* Overview and compitency */}
@@ -211,7 +319,7 @@ const CourseDescription = () => {
         <div className='flex justify-center'>
           <ButtonFill
             onClick={() => setShowPopUp(true)}
-            classes='w-[330px] h-[45px] bg-[#385B8B] text-[#fff] mt-5'
+            classes='flex-grow h-[45px] bg-[#385B8B] text-[#fff] mt-5'
           >
             Buy Now &nbsp;&nbsp; Cr. {courseDetails?.credits}
           </ButtonFill>

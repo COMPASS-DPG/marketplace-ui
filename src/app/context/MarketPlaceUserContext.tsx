@@ -1,8 +1,17 @@
 'use client';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { getSavedCourse } from '@/services/marketplaceServices';
+import {
+  getongoingCoursess,
+  getSavedCourse,
+} from '@/services/marketplaceServices';
 
 export const getInitialValue = (): CourseType[] => {
   return [
@@ -26,6 +35,7 @@ export const getInitialValue = (): CourseType[] => {
       created_by: 'Author 1',
       avgRating: 4,
       credits: 100,
+      providerName: 'learning',
       language: ['One', 'Two', 'Three'],
       imageLink: '../../../public/images/courseImage.png',
       description:
@@ -53,11 +63,12 @@ export const getInitialValue = (): CourseType[] => {
       created_by: 'Author 2',
       avgRating: 3,
       credits: 100,
-      language: ['One', 'Three'],
+      language: ['English', 'Canada'],
       imageLink: '../../../public/images/courseImage.png',
       description:
         'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia volupta sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt mollit anim id essed quia consequuntur maExcepteur sint occaecat  cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
       author: 'dummyAuthore',
+      providerName: 'CourseEra',
       lastUpdatedOn: '24-aug-2024',
     },
     {
@@ -85,6 +96,7 @@ export const getInitialValue = (): CourseType[] => {
       description:
         'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia volupta sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt mollit anim id essed quia consequuntur maExcepteur sint occaecat  cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
       author: 'dummyAuthore',
+      providerName: 'Udemy',
       lastUpdatedOn: '24-aug-2024',
     },
   ];
@@ -103,19 +115,29 @@ export type CourseType = {
   language: string[];
   imageLink: string;
   description: string;
-  author: string;
+  author?: string;
+  courseLink?: string;
+  bppId?: string;
+  providerId?: string;
+  providerName?: string;
 };
 
 interface WpcasContextValue {
   savedCourses: CourseType[];
   mostPopularCourses: CourseType[];
   recommendedCourses: CourseType[];
+  ongoingCourses: CourseType[];
+  loading: boolean;
+  error: boolean;
 }
 
 const MarketPlaceUserProvider = createContext<WpcasContextValue>({
   savedCourses: [],
   mostPopularCourses: [],
   recommendedCourses: [],
+  ongoingCourses: [],
+  loading: true,
+  error: false,
 });
 
 const MarketPlaceUserContext = ({
@@ -123,6 +145,9 @@ const MarketPlaceUserContext = ({
 }: {
   children: React.ReactElement;
 }) => {
+  const router = useRouter();
+  const userId = localStorage.getItem('userId') ?? '';
+  const userId2 = '123e4567-e89b-42d3-a456-556642440001';
   const [savedCourses, setsavedCourses] = useState<CourseType[]>([]);
   const [mostPopularCourses, setmostPopularCourses] = useState<CourseType[]>(
     []
@@ -130,27 +155,48 @@ const MarketPlaceUserContext = ({
   const [recommendedCourses, setrecommendedCoursess] = useState<CourseType[]>(
     []
   );
-  const userId = '123e4567-e89b-42d3-a456-556642440000';
+  const [ongoingCourses, setOngoingCourses] = useState<CourseType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const fetchAllCourse = async () => {
+  const fetchAllCourse = useCallback(async () => {
     try {
       const response = await getSavedCourse(userId);
       // const response2 = await getmostPopularCourses(userId);
       // const response3 = await getrecommendedCoursess(userId);
+      const response4 = await getongoingCoursess(userId2);
+      const ongoingCoursesInfo = response4.map(
+        (item: { CourseInfo: CourseType }) => item.CourseInfo
+      );
+
+      setLoading(false);
       setsavedCourses(response);
       setmostPopularCourses(getInitialValue());
       setrecommendedCoursess(getInitialValue());
+      setOngoingCourses(ongoingCoursesInfo);
+
+      router.push('/marketplace');
     } catch (error) {
-      toast.error('something went wrong');
+      router.push('/error');
+      setLoading(false);
+      setError(true);
     }
-  };
+  }, [userId, userId2, router]);
+
   useEffect(() => {
     fetchAllCourse();
-  }, []);
+  }, [fetchAllCourse]);
 
   return (
     <MarketPlaceUserProvider.Provider
-      value={{ savedCourses, mostPopularCourses, recommendedCourses }}
+      value={{
+        savedCourses,
+        mostPopularCourses,
+        recommendedCourses,
+        ongoingCourses,
+        loading,
+        error,
+      }}
     >
       {children}
     </MarketPlaceUserProvider.Provider>

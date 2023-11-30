@@ -7,15 +7,17 @@ import { CourseType } from '@/app/context/MarketPlaceUserContext';
 const CourseBox = ({
   heading,
   CoursesList,
+  handleSeeAllButtonClick,
 }: {
   heading: string;
   CoursesList: CourseType[];
+  handleSeeAllButtonClick: string;
 }) => {
   return (
     <div>
       <div className='mt-5 flex items-center justify-between px-5 py-4'>
         <Heading heading={heading} />
-        <SeeAll heading='See all' />
+        <SeeAll heading='See all' redirectTo={handleSeeAllButtonClick} />
       </div>
       <div className='flex  gap-2 px-4'>
         <CourseSlides CoursesList={CoursesList} />

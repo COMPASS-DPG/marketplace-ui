@@ -1,5 +1,22 @@
 import axios from 'axios';
 
+export type requestCourseType = {
+  courseId: number;
+  bppId?: string;
+  title: string;
+  description: string;
+  credits: number;
+  imageLink: string;
+  language: string[];
+  courseLink: string;
+  providerName: string;
+  providerId?: string;
+  avgRating: number;
+  competency: {
+    [key: string]: string[];
+  };
+};
+
 export const getUserInfo = async () => {
   const data = await axios.get(
     `http://localhost:4000/api/consumer/course/saved`
@@ -9,6 +26,12 @@ export const getUserInfo = async () => {
 export const getSavedCourse = async (userId: string) => {
   const data = await axios.get(
     `http://localhost:4000/api/consumer/${userId}/course/saved`
+  );
+  return data.data.data.consumerCourses;
+};
+export const getongoingCoursess = async (userId: string) => {
+  const data = await axios.get(
+    `http://localhost:4000/api/consumer/${userId}/course/ongoing`
   );
   return data.data.data.consumerCourses;
 };
@@ -61,4 +84,30 @@ export const fetchSingleCourse = async (courseId: string) => {
     `http://localhost:4000/api/consumer/course/${courseId}`
   );
   return data.data.data.course;
+};
+export const saveACourse = async (
+  userId: string,
+  payload: requestCourseType
+) => {
+  const data = await axios.post(
+    `http://localhost:4000/api/consumer/${userId}/course/save`,
+    payload
+  );
+  return data.data.data;
+};
+export const unsaveACourse = async (userId: string, courseId: number) => {
+  const data = await axios.patch(
+    `http://localhost:4000/api/consumer/${userId}/course/${courseId}/unsave`
+  );
+  return data.data.data;
+};
+export const purchasesACourse = async (
+  userId: string,
+  payload: requestCourseType
+) => {
+  const data = await axios.post(
+    `http://localhost:4000/api/consumer/${userId}/course/purchase`,
+    payload
+  );
+  return data.data.data;
 };

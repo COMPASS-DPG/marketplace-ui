@@ -3,40 +3,33 @@ import { RxCross2 } from 'react-icons/rx';
 
 import ButtonFill from '@/components/buttons/ButtonFill';
 import { outfit } from '@/components/FontFamily';
-const Options = [
-  { value: 'Pregnancy Identification', label: 'Pregnancy Identification' },
-  {
-    value: 'Vaginal Examination and plotting on partograph',
-    label: 'Vaginal Examination and plotting on partograph',
-  },
-  {
-    value: 'Lorem ipsum dolor vfdgfd differesdb ksadvcnjksn ...',
-    label: 'Lorem ipsum dolor vfdgfd differesdb ksadvcnjksn ...',
-  },
-];
-
 import MultipleButton from '@/components/Input/MultipleButton';
 import MultiSelectTag from '@/components/Input/MultiSelectTag';
 
-import { filterObjType } from '../app/search/page';
+import { filterObjType, optionType } from '../app/search/page';
 const FilterCourse = ({
   filterObj,
   setFilterObj,
   setFilterOpen,
   SearchFilterOptions,
+  filterOption,
+  handleFiterButton,
 }: {
   filterObj: filterObjType;
   setFilterObj: (value: filterObjType) => void;
   setFilterOpen: (value: boolean) => void;
   SearchFilterOptions: () => void;
+  handleFiterButton: () => void;
+  filterOption: optionType;
 }) => {
   const handleChange = (name: string, value: string[] | string) => {
     setFilterObj({ ...filterObj, [name]: value });
   };
 
   const handleFilterButton = () => {
-    setFilterOpen(false);
     SearchFilterOptions();
+    setFilterOpen(false);
+    handleFiterButton();
   };
 
   return (
@@ -56,7 +49,7 @@ const FilterCourse = ({
         <MultiSelectTag
           onChange={(value) => handleChange('competencies', value)}
           value={filterObj.competencies}
-          options={Options}
+          options={filterOption?.competency}
           placeholder='--Select--'
         />
       </div>
@@ -70,7 +63,7 @@ const FilterCourse = ({
         <MultiSelectTag
           onChange={(value) => handleChange('courseProviders', value)}
           value={filterObj.courseProviders}
-          options={Options}
+          options={filterOption?.courseProvider}
           placeholder='--Select--'
         />
       </div>
@@ -83,7 +76,7 @@ const FilterCourse = ({
         <MultiSelectTag
           onChange={(value) => handleChange('language', value)}
           value={filterObj.language}
-          options={Options}
+          options={filterOption?.language}
           placeholder='--Select--'
         />
       </div>

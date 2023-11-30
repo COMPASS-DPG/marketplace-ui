@@ -1,16 +1,20 @@
 'use client';
 import * as React from 'react';
 
-import TitleNavbar from '@/components/navbar/TitleNavbar';
+import Footer from '@/components/navbar/Footer';
+import TopNavbar from '@/components/navbar/TopNavbar';
 import PullRefresh from '@/components/PullToRefresh';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='max-w-[374px]	'>
+    <div className='max-w-sm '>
       <PullRefresh>
         <>
-          <TitleNavbar title='Notifications' />
+          <TopNavbar />
           {children}
+          <div className='static  bottom-0'>
+            <Footer />
+          </div>
         </>
       </PullRefresh>
     </div>

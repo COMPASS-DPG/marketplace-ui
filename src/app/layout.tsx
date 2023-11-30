@@ -7,6 +7,8 @@ import '@/styles/globals.css';
 import '@/styles/colors.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+import ConnectionCheckWrapper from '@/components/ErrorScreen/ConnectionCheckWrapper';
+
 import ContextWrapper from '@/app/context/ContextWrapper';
 import { siteConfig } from '@/constant/config';
 
@@ -57,24 +59,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ContextWrapper>
-      <html>
-        <body>
-          {children}
-          <ToastContainer
-            position='top-right'
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme='colored'
-          />
-        </body>
-      </html>
-    </ContextWrapper>
+    <html>
+      <body>
+        <ConnectionCheckWrapper>
+          <ContextWrapper>
+            <>
+              {children}
+              <ToastContainer
+                position='top-right'
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme='colored'
+                className='w-[300px]'
+              />
+            </>
+          </ContextWrapper>
+        </ConnectionCheckWrapper>
+      </body>
+    </html>
   );
 }
