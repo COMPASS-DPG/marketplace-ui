@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { BsBookmark, BsFillBookmarkFill, BsShare } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ButtonFill from '@/components/buttons/ButtonFill';
@@ -16,13 +17,21 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
-  fetchSingleCourse,
+  getSaveCourseStatus,
   purchasesACourse,
+  removeCourse,
   saveACourse,
-  unsaveACourse,
-} from '@/services/marketplaceServices';
+} from '@/redux/coursesDescription/action';
+import {
+  GET_SAVE_COURSE_STATUS_SUCCESS,
+  PURCHASE_COURSE_SUCCESS,
+  REMOVE_COURSE_SUCCESS,
+  SAVE_COURSE_SUCCESS,
+} from '@/redux/coursesDescription/type';
+import { getMarketplaceCourses } from '@/redux/marketplace/action';
+import { AppDispatch, RootState } from '@/redux/store';
 
-import CourseFullImage from '../../../../public/images/courseFullImage.png';
+import { EditIcon, Star } from '~/svg';
 
 export const getSingleCourseValue = (): SingleCourseType => {
   return {
@@ -78,23 +87,34 @@ export type SingleCourseType = {
   providerId: string;
 };
 
-import { EditIcon, Star } from '~/svg';
-
-const CourseDescription = () => {
+const CourseDescription = ({ params }: { params: { id: string } }) => {
   const userId = localStorage.getItem('userId') ?? '';
+  const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
   const { id } = useParams();
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
-  const [isSavedCourse, setIsSavedCourse] = useState<boolean>(false);
-  const [courseDetails, setCourseDetails] =
-    useState<SingleCourseType>(getSingleCourseValue);
+
+  const { savedCourses, mostPopularCourses, recommendedCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
+  const { status } = useSelector((state: RootState) => state?.singleCourse);
+  const [isSavedCourse, setIsSavedCourse] = useState<boolean>(status ?? false);
+
+  const allCourses = [
+    ...(savedCourses ? savedCourses : []),
+    ...(mostPopularCourses ? mostPopularCourses : []),
+    ...(recommendedCourses ? recommendedCourses : []),
+  ];
+
+  const singleCourse = allCourses?.find((item) => item?.courseId == params.id);
+
   //share course button
   const handleShareClick = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: `${courseDetails?.title}`,
+        title: `${singleCourse?.title}`,
         text: 'Check out this amazing Course!',
         url: window.location.href,
       });
@@ -103,38 +123,27 @@ const CourseDescription = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const courseId = Array.isArray(id) ? id[0] : id;
-        const response = await fetchSingleCourse(courseId);
-        setCourseDetails(response);
-      } catch (error) {
-        toast.error('something went wrong');
-      }
-    };
-    fetchDetails();
-  }, [id]);
-
   const purchaseCourse = async () => {
     try {
       const payload = {
-        courseId: courseDetails?.id,
-        bppId: 'xyz',
-        title: courseDetails?.title,
-        description: courseDetails?.description,
-        credits: courseDetails?.credits,
-        imageLink: courseDetails?.imgLink,
-        language: courseDetails?.language,
-        courseLink: courseDetails?.courseLink,
-        providerName: courseDetails?.providerName,
-        avgRating: courseDetails?.avgRating,
-        competency: courseDetails?.competency,
-        providerId: courseDetails?.providerId,
+        courseId: singleCourse?.courseId,
+        title: singleCourse?.title,
+        description: singleCourse?.description,
+        credits: singleCourse?.credits,
+        imageLink: singleCourse?.imageLink,
+        language: singleCourse?.language,
+        courseLink: singleCourse?.courseLink,
+        providerName: singleCourse?.providerName,
+        avgRating: singleCourse?.avgRating,
+        competency: singleCourse?.competency,
+        providerId: singleCourse?.providerId,
+        author: singleCourse?.author,
       };
-      await purchasesACourse(userId, payload);
-      router.push('/ongoing-courses');
-      //  setLoading(false);
+      dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
+        if ((res as { type?: string })?.type === PURCHASE_COURSE_SUCCESS) {
+          router.push('/ongoing-courses');
+        }
+      });
     } catch (error) {
       toast.error('something went wrong');
       // Handle any errors that occur during the API call
@@ -145,37 +154,61 @@ const CourseDescription = () => {
     }
   };
   const handleSavedIconClick = async () => {
-    try {
-      if (isSavedCourse) {
-        await unsaveACourse(userId, parseInt(Array.isArray(id) ? id[0] : id));
-        setIsSavedCourse(false);
-        toast.success('course unsaved successfully');
-      } else {
-        const payload = {
-          courseId: courseDetails?.id,
-          bppId: 'xyz',
-          title: courseDetails?.title,
-          description: courseDetails?.description,
-          credits: courseDetails?.credits,
-          imageLink: courseDetails?.imgLink,
-          language: courseDetails?.language,
-          courseLink: courseDetails?.courseLink,
-          providerName: courseDetails?.providerName,
-          avgRating: courseDetails?.avgRating,
-          competency: courseDetails?.competency,
-        };
+    if (isSavedCourse) {
+      dispatch(
+        removeCourse(userId, parseInt(Array.isArray(id) ? id[0] : id))
+      ).then((res: unknown) => {
+        if ((res as { type?: string }).type === REMOVE_COURSE_SUCCESS) {
+          setIsSavedCourse(false);
+          toast.success('course unsaved successfully');
+        }
+      });
+    } else {
+      const payload = {
+        courseId: singleCourse?.courseId,
+        title: singleCourse?.title,
+        description: singleCourse?.description,
+        credits: singleCourse?.credits,
+        imageLink: singleCourse?.imageLink,
+        language: singleCourse?.language,
+        courseLink: singleCourse?.courseLink,
+        providerName: singleCourse?.providerName,
+        author: singleCourse?.author,
+        avgRating: singleCourse?.avgRating,
+        competency: singleCourse?.competency,
+      };
 
-        await saveACourse(userId, payload);
-        toast.success('course saved successfully');
-        setIsSavedCourse(true);
-      }
-    } catch (error) {
-      toast.error('something went wrong');
-      // Handle any errors that occur during the API call
-      // eslint-disable-next-line no-console
-      console.error('API call error:', error);
+      dispatch(saveACourse(userId, payload)).then((res: unknown) => {
+        if ((res as { type?: string }).type === SAVE_COURSE_SUCCESS) {
+          setIsSavedCourse(true);
+          toast.success('course saved successfully');
+        }
+      });
     }
   };
+
+  const handleBack = () => {
+    dispatch(getMarketplaceCourses(userId));
+    router.back();
+  };
+
+  useEffect(() => {
+    if ((params.id, !singleCourse)) {
+      dispatch(getMarketplaceCourses(userId));
+    }
+  }, [params.id, dispatch, singleCourse, userId]);
+
+  useEffect(() => {
+    dispatch(getSaveCourseStatus(userId, parseInt(params.id))).then(
+      (res: unknown) => {
+        if (
+          (res as { type?: string }).type === GET_SAVE_COURSE_STATUS_SUCCESS
+        ) {
+          setIsSavedCourse((res as { payload?: boolean }).payload ?? false);
+        }
+      }
+    );
+  }, [userId, params.id, dispatch]);
 
   return (
     <div className={`${outfit.className}`}>
@@ -190,7 +223,7 @@ const CourseDescription = () => {
       {DetailsPopUp && (
         <BasicPopup
           setDetailsPopUp={setDetailsPopUp}
-          courseDetails={courseDetails}
+          courseDetails={singleCourse}
         />
       )}
       {/* header */}
@@ -200,7 +233,7 @@ const CourseDescription = () => {
       >
         <div
           className='border-neutural-100 rounded-lg border'
-          onClick={() => router.back()}
+          onClick={handleBack}
         >
           <MdOutlineKeyboardArrowLeft width='24px' className=' m-2' />
         </div>
@@ -228,12 +261,14 @@ const CourseDescription = () => {
       {/* description */}
       <div className='px-5 py-2'>
         <Image
-          src={CourseFullImage}
+          className='rounded-xl'
+          src={singleCourse?.imageLink}
           alt='course-description-image'
-          width='510'
+          width={350}
+          height={250}
         />
         <p className='pt-3 text-[18px] font-extrabold  text-[#272728]'>
-          {courseDetails?.title}
+          {singleCourse?.title}
         </p>
         <div
           className='my-1 flex items-center gap-1'
@@ -243,11 +278,11 @@ const CourseDescription = () => {
           <span
             className={`${outfit.className} py-1 text-[15px] font-medium uppercase text-[#385B8B]  `}
           >
-            {courseDetails?.providerName || 'DUMMY PROVIDER'}
+            {singleCourse?.providerName || 'DUMMY PROVIDER'}
           </span>
         </div>
         <div className='my-1 flex gap-1'>
-          {courseDetails?.language?.map((item, index) => (
+          {singleCourse?.language?.map((item: string, index: number) => (
             <ColoredText
               key={index}
               text={item.charAt(0).toUpperCase() + item.slice(1)}
@@ -261,10 +296,10 @@ const CourseDescription = () => {
         </div>
         <div className='flex justify-between'>
           <p className='text-[16px] font-semibold leading-6 text-[#272728]	'>
-            Cr. {courseDetails.credits}
+            Cr. {singleCourse?.credits}
           </p>
           <p className='flex items-center text-[15px] font-bold text-[#787878]'>
-            {courseDetails?.avgRating ?? '--'}
+            {singleCourse?.avgRating ?? '--'}
             <span className='pl-0.5'>
               <Star width='12px' />
             </span>
@@ -274,7 +309,7 @@ const CourseDescription = () => {
       {/* member tab */}
       <div className='flex items-center gap-1 px-5 text-[16px] text-[#65758C]'>
         <GoPeople />
-        <p>{courseDetails?.numOfUsers} Members</p>
+        <p>{singleCourse?.numberOfPurchases} Members</p>
       </div>
       <hr className='mb-5 mt-4 h-[1px] text-[#F4F4F4]' />
       {/* Overview and compitency */}
@@ -309,10 +344,10 @@ const CourseDescription = () => {
         {/* two component */}
         <div>
           {option === 'overview' && (
-            <Overview about={courseDetails?.description} />
+            <Overview about={singleCourse?.description} />
           )}
           {option === 'competencies' && (
-            <Competencies competency={courseDetails?.competency} />
+            <Competencies competency={singleCourse?.competency} />
           )}
         </div>
         {/* bottom button */}
@@ -321,7 +356,7 @@ const CourseDescription = () => {
             onClick={() => setShowPopUp(true)}
             classes='flex-grow h-[45px] bg-[#385B8B] text-[#fff] mt-5'
           >
-            Buy Now &nbsp;&nbsp; Cr. {courseDetails?.credits}
+            Buy Now &nbsp;&nbsp; Cr. {singleCourse?.credits}
           </ButtonFill>
         </div>
       </div>

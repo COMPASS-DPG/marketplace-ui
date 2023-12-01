@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import ButtonFill from '@/components/buttons/ButtonFill';
 import { outfit, poppins } from '@/components/FontFamily';
 
-import { CourseType } from '@/app/context/MarketPlaceUserContext';
+import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 
 const SwipeSlide = ({ course }: { course: CourseType }) => {
   const router = useRouter();
@@ -22,13 +22,15 @@ const SwipeSlide = ({ course }: { course: CourseType }) => {
       <p
         className={`${outfit.className} text-[13px] font-normal text-neutral-500`}
       >
-        {Object.keys(course?.competency)?.map((key, index) => {
+        {Object.keys(course?.competency ?? {})?.map((key, index) => {
           if (index < 2) {
             return (
               <li key={key}>
                 {key} (
                 {course.competency[key]
-                  .map((level, levelIndex) => `L${levelIndex + 1}`)
+                  .map(
+                    (level: string, levelIndex: number) => `L${levelIndex + 1}`
+                  )
                   .join(', ')}
                 ),{index == 1 && '....'}
               </li>

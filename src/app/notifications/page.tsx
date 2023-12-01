@@ -1,13 +1,14 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { outfit } from '@/components/FontFamily';
 
 import Spinner from '@/app/components/Spinner';
-import { getAllNotifications } from '@/services/marketplaceServices';
+import { getAllNotifications } from '@/redux/notification/action';
+import { AppDispatch, RootState } from '@/redux/store';
 
-type NotificationType = {
+export type NotificationType = {
   id: number;
   link: string;
   status: string;
@@ -17,56 +18,41 @@ type NotificationType = {
 
 const Notifications = () => {
   const userId = localStorage.getItem('userId') ?? '';
-  const [viewedNotifications, setViewedNotifications] = useState<
-    NotificationType[]
-  >([]);
-  const [unviewedNotifications, setUnviewedNotifications] = useState<
-    NotificationType[]
-  >([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
+  const {
+    notificationData,
+    isLoading,
+    isError,
+  }: {
+    notificationData: NotificationType[];
+    isLoading: boolean;
+    isError: boolean;
+  } = useSelector((state: RootState) => state.notification);
 
-  const fetchNotifications = useCallback(async () => {
-    try {
-      const response = await getAllNotifications(userId);
-
-      const viewed = response.filter(
-        (notification: NotificationType) => notification.status === 'VIEWED'
-      );
-      const unviewed = response.filter(
-        (notification: NotificationType) => notification.status !== 'VIEWED'
-      );
-      setLoading(false);
-      setViewedNotifications(viewed);
-      setUnviewedNotifications(unviewed);
-    } catch (error) {
-      toast.error('something went wrong');
-      // Handle any errors that occur during the API call
-      // eslint-disable-next-line no-console
-      console.error('API call error:', error);
-      setLoading(false);
-
-      setError(true);
-    }
-  }, [userId]);
+  const viewedNotifications: NotificationType[] = notificationData?.filter(
+    (notification: NotificationType) => notification.status === 'VIEWED'
+  );
+  const unviewedNotifications: NotificationType[] = notificationData?.filter(
+    (notification: NotificationType) => notification.status !== 'VIEWED'
+  );
 
   useEffect(() => {
-    fetchNotifications();
-  }, [fetchNotifications]);
+    dispatch(getAllNotifications(userId));
+  }, [dispatch, userId]);
 
   return (
     <div className={`${outfit.className}`}>
-      {loading && (
+      {isLoading && (
         <div className='mt-[100px] text-center'>
           <Spinner />
         </div>
       )}
-      {error && (
+      {isError && (
         <div className='mt-[100px] text-center text-[16px] font-medium text-[#272728]'>
           Error...
         </div>
       )}
-      {!loading && !error && (
+      {!isLoading && !isError && (
         <div className='px-5'>
           {/* unviewed  */}
           {unviewedNotifications?.length > 0 &&

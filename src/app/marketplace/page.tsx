@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import 'swiper/css';
 
 import CourseBox from '@/components/Course/CourseBox';
@@ -9,11 +11,21 @@ import SeeAll from '@/components/heading/SeeAll';
 import UnclickableSearchInput from '@/components/Input/UnclickableSearchInput';
 import SwiperDiv from '@/components/SwiperDiv';
 
-import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
+import { getMarketplaceCourses } from '@/redux/marketplace/action';
+import { AppDispatch, RootState } from '@/redux/store';
 
 const MarketPlace = () => {
-  const { savedCourses, mostPopularCourses, recommendedCourses } =
-    useMarketPlaceContext();
+  const userId = localStorage.getItem('userId') ?? '';
+  const dispatch: AppDispatch = useDispatch();
+  const { savedCourses, mostPopularCourses, recommendedCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
+
+  useEffect(() => {
+    if (!savedCourses || !mostPopularCourses || !recommendedCourses) {
+      dispatch(getMarketplaceCourses(userId));
+    }
+  }, [dispatch, userId, savedCourses, mostPopularCourses, recommendedCourses]);
 
   return (
     <div>

@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import CourseBox from '@/components/Course/CourseBox';
@@ -10,8 +11,9 @@ import Heading from '@/components/heading/Heading';
 import SearchInput from '@/components/Input/SearchInput';
 import SearchTopbar from '@/components/navbar/SearchTopbar';
 
-import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
 import { SingleCourseType } from '@/app/course-description/[id]/page';
+import { getMarketplaceCourses } from '@/redux/marketplace/action';
+import { AppDispatch, RootState } from '@/redux/store';
 import { getFilterCourse } from '@/services/marketplaceServices';
 
 import { NotFound } from '~/svg';
@@ -44,7 +46,12 @@ const initialFilterOption: optionType = {
   courseProvider: [],
 };
 const SearchPage = () => {
-  const { mostPopularCourses } = useMarketPlaceContext();
+  const userId = localStorage.getItem('userId') ?? '';
+  const dispatch: AppDispatch = useDispatch();
+  const { mostPopularCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
+
   const [input, setInput] = useState<string>('');
   const [showMostPopularCourses, setShowMostPopularCourses] =
     useState<boolean>(true);
@@ -109,22 +116,11 @@ const SearchPage = () => {
     }
   };
 
-  if (isFilterOpen) {
-    return (
-      <FilterPage
-        filterObj={filterObj}
-        setFilterObj={setFilterObj}
-        setFilterOpen={setFilterOpen}
-        SearchFilterOptions={SearchFilterOptions}
-        filterOption={filterOption}
-        handleFiterButton={handleFiterButton}
-      />
-    );
-  }
   const handleCrossIcon = () => {
     setShowMostPopularCourses(true);
     setInput('');
   };
+
   const handleFilterIcon = () => {
     // Extract distinct values for competencies, language, and courseProviders
     const allCompetencies = Array.from(
@@ -164,6 +160,25 @@ const SearchPage = () => {
     updatedOptions.splice(indexToRemove, 1);
     setSelectedOption(updatedOptions);
   };
+
+  useEffect(() => {
+    if (!mostPopularCourses) {
+      dispatch(getMarketplaceCourses(userId));
+    }
+  }, [dispatch, userId, mostPopularCourses]);
+
+  if (isFilterOpen) {
+    return (
+      <FilterPage
+        filterObj={filterObj}
+        setFilterObj={setFilterObj}
+        setFilterOpen={setFilterOpen}
+        SearchFilterOptions={SearchFilterOptions}
+        filterOption={filterOption}
+        handleFiterButton={handleFiterButton}
+      />
+    );
+  }
 
   return (
     <div className='ml-[16px]'>

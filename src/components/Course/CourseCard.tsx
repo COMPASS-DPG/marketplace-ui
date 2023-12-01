@@ -4,12 +4,13 @@ import Link from 'next/link';
 
 import { outfit } from '@/components/FontFamily';
 
-import { CourseType } from '@/app/context/MarketPlaceUserContext';
+import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 
 import ColoredText from '../heading/ColoredText';
 import CourseImage from '../../../public/images/courseImage.png';
 
 import { EditIcon, Star } from '~/svg';
+
 const CourseCard = ({
   courseDetails,
   width = '311px',
@@ -38,8 +39,11 @@ const CourseCard = ({
                   return (
                     <li className='font-semibold' key={key}>
                       {key} (
-                      {courseDetails.competency[key]
-                        .map((level, levelIndex) => `L${levelIndex + 1}`)
+                      {courseDetails?.competency[key]
+                        .map(
+                          (level: string, levelIndex: number) =>
+                            `L${levelIndex + 1}`
+                        )
                         .join(', ')}
                       ){index == 1 && '....'}
                     </li>
@@ -59,7 +63,7 @@ const CourseCard = ({
             >
               {courseDetails?.providerName}
             </span>
-            {courseDetails?.language?.map((item, index) => (
+            {courseDetails?.language?.map((item: string, index: number) => (
               <ColoredText
                 key={index}
                 text={item.charAt(0).toUpperCase() + item.slice(1)}

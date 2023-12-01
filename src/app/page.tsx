@@ -1,7 +1,13 @@
 'use client';
 
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
+
+import { getMarketplaceCourses } from '@/redux/marketplace/action';
+import { MARKETPLACE_SUCCESS } from '@/redux/marketplace/type';
+import { AppDispatch } from '@/redux/store';
 
 /**
  * SVGR Support
@@ -16,6 +22,17 @@ import * as React from 'react';
 // to customize the default configuration.
 
 export default function HomePage() {
+  const userId = localStorage.getItem('userId') ?? '';
+  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getMarketplaceCourses(userId)).then((res: unknown) => {
+      if ((res as { type?: string }).type === MARKETPLACE_SUCCESS) {
+        router.push('/marketplace');
+      }
+    });
+  }, [dispatch, userId, router]);
   return (
     <main>
       <Head>
