@@ -129,6 +129,7 @@ interface WpcasContextValue {
   ongoingCourses: CourseType[];
   loading: boolean;
   error: boolean;
+  setsavedCourses: (arg: CourseType[]) => void;
 }
 
 const MarketPlaceUserProvider = createContext<WpcasContextValue>({
@@ -138,6 +139,7 @@ const MarketPlaceUserProvider = createContext<WpcasContextValue>({
   ongoingCourses: [],
   loading: true,
   error: false,
+  setsavedCourses: () => null,
 });
 
 const MarketPlaceUserContext = ({
@@ -147,7 +149,6 @@ const MarketPlaceUserContext = ({
 }) => {
   const router = useRouter();
   const userId = localStorage.getItem('userId') ?? '';
-  const userId2 = '123e4567-e89b-42d3-a456-556642440001';
   const [savedCourses, setsavedCourses] = useState<CourseType[]>([]);
   const [mostPopularCourses, setmostPopularCourses] = useState<CourseType[]>(
     []
@@ -164,7 +165,7 @@ const MarketPlaceUserContext = ({
       const response = await getSavedCourse(userId);
       // const response2 = await getmostPopularCourses(userId);
       // const response3 = await getrecommendedCoursess(userId);
-      const response4 = await getongoingCoursess(userId2);
+      const response4 = await getongoingCoursess(userId);
       const ongoingCoursesInfo = response4.map(
         (item: { CourseInfo: CourseType }) => item.CourseInfo
       );
@@ -181,7 +182,7 @@ const MarketPlaceUserContext = ({
       setLoading(false);
       setError(true);
     }
-  }, [userId, userId2, router]);
+  }, [userId, router]);
 
   useEffect(() => {
     fetchAllCourse();
@@ -196,6 +197,7 @@ const MarketPlaceUserContext = ({
         ongoingCourses,
         loading,
         error,
+        setsavedCourses,
       }}
     >
       {children}

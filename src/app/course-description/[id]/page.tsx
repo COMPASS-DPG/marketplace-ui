@@ -16,7 +16,9 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
+  checkSavedStatus,
   fetchSingleCourse,
+  getSavedCourse,
   purchasesACourse,
   saveACourse,
   unsaveACourse,
@@ -78,9 +80,12 @@ export type SingleCourseType = {
   providerId: string;
 };
 
+import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
+
 import { EditIcon, Star } from '~/svg';
 
 const CourseDescription = () => {
+  const { setsavedCourses } = useMarketPlaceContext();
   const userId = localStorage.getItem('userId') ?? '';
   const router = useRouter();
   const { id } = useParams();
@@ -108,19 +113,22 @@ const CourseDescription = () => {
       try {
         const courseId = Array.isArray(id) ? id[0] : id;
         const response = await fetchSingleCourse(courseId);
+        const response2 = await checkSavedStatus(userId, Number(courseId));
+        if (response2) {
+          setIsSavedCourse(true);
+        }
         setCourseDetails(response);
       } catch (error) {
         toast.error('something went wrong');
       }
     };
     fetchDetails();
-  }, [id]);
+  }, [userId, id]);
 
   const purchaseCourse = async () => {
     try {
       const payload = {
         courseId: courseDetails?.id,
-        bppId: 'xyz',
         title: courseDetails?.title,
         description: courseDetails?.description,
         credits: courseDetails?.credits,
@@ -130,7 +138,7 @@ const CourseDescription = () => {
         providerName: courseDetails?.providerName,
         avgRating: courseDetails?.avgRating,
         competency: courseDetails?.competency,
-        providerId: courseDetails?.providerId,
+        author: courseDetails?.author,
       };
       await purchasesACourse(userId, payload);
       router.push('/ongoing-courses');
@@ -149,11 +157,13 @@ const CourseDescription = () => {
       if (isSavedCourse) {
         await unsaveACourse(userId, parseInt(Array.isArray(id) ? id[0] : id));
         setIsSavedCourse(false);
+        const response = await getSavedCourse(userId);
+        setsavedCourses(response);
         toast.success('course unsaved successfully');
       } else {
         const payload = {
+          author: courseDetails?.author,
           courseId: courseDetails?.id,
-          bppId: 'xyz',
           title: courseDetails?.title,
           description: courseDetails?.description,
           credits: courseDetails?.credits,
@@ -166,6 +176,8 @@ const CourseDescription = () => {
         };
 
         await saveACourse(userId, payload);
+        const response = await getSavedCourse(userId);
+        setsavedCourses(response);
         toast.success('course saved successfully');
         setIsSavedCourse(true);
       }

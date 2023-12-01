@@ -2,10 +2,10 @@ import axios from 'axios';
 
 export type requestCourseType = {
   courseId: number;
-  bppId?: string;
   title: string;
   description: string;
   credits: number;
+  author: string;
   imageLink: string;
   language: string[];
   courseLink: string;
@@ -110,4 +110,10 @@ export const purchasesACourse = async (
     payload
   );
   return data.data.data;
+};
+export const checkSavedStatus = async (userId: string, cousrseId: number) => {
+  const data = await axios.get(
+    `http://localhost:4000/api/consumer/${userId}/course/${cousrseId}/save`
+  );
+  return data.data.saved;
 };
