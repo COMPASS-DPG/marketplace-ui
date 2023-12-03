@@ -3,19 +3,20 @@ import { Dispatch } from 'react';
 import { toast } from 'react-toastify';
 
 import {
-  GET_SAVE_COURSE_STATUS_FAILURE,
-  GET_SAVE_COURSE_STATUS_REQUEST,
-  GET_SAVE_COURSE_STATUS_SUCCESS,
+  GET_SAVE_COURSE_AND_STATUS_FAILURE,
+  GET_SAVE_COURSE_AND_STATUS_REQUEST,
+  GET_SAVE_COURSE_AND_STATUS_SUCCESS,
   PURCHASE_COURSE_FAILURE,
   PURCHASE_COURSE_REQUEST,
   PURCHASE_COURSE_SUCCESS,
-  REMOVE_COURSE_FAILURE,
-  REMOVE_COURSE_REQUEST,
-  REMOVE_COURSE_SUCCESS,
   SAVE_COURSE_FAILURE,
   SAVE_COURSE_REQUEST,
   SAVE_COURSE_SUCCESS,
+  UNSAVE_COURSE_FAILURE,
+  UNSAVE_COURSE_REQUEST,
+  UNSAVE_COURSE_SUCCESS,
 } from './type';
+import { CourseType } from '../marketplace/marketplaceReducer';
 
 export type requestCourseType = {
   courseId: number;
@@ -62,22 +63,25 @@ type CourseDescriptionActionTypes = {
 
 type SingleCourseActionTypes = {
   type: string;
-  payload?: SingleCourseType;
+  payload?: {
+    status: boolean;
+    singleCourse: CourseType;
+  };
 };
 
 export const removeCourse =
   (userId: string, courseId: number) =>
   (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
-    dispatch({ type: REMOVE_COURSE_REQUEST });
+    dispatch({ type: UNSAVE_COURSE_REQUEST });
     return axios
       .patch(
         `http://localhost:4000/api/consumer/${userId}/course/${courseId}/unsave`
       )
       .then((res) =>
-        dispatch({ type: REMOVE_COURSE_SUCCESS, payload: res.data.data })
+        dispatch({ type: UNSAVE_COURSE_SUCCESS, payload: res.data.data })
       )
       .catch(() => {
-        dispatch({ type: REMOVE_COURSE_FAILURE });
+        dispatch({ type: UNSAVE_COURSE_FAILURE });
         toast.error('something went wrong');
       });
   };
@@ -115,22 +119,25 @@ export const purchasesACourse =
       });
   };
 
-export const getSaveCourseStatus =
-  (userId: string, courseId: number) =>
+export const getSaveCourseAndStatus =
+  (userId: string, courseId: number, singleCourse: CourseType) =>
   (dispatch: Dispatch<SingleCourseActionTypes>) => {
-    dispatch({ type: GET_SAVE_COURSE_STATUS_REQUEST });
+    dispatch({ type: GET_SAVE_COURSE_AND_STATUS_REQUEST });
     return axios
       .get(
         `http://localhost:4000/api/consumer/${userId}/course/${courseId}/save`
       )
       .then((res) =>
         dispatch({
-          type: GET_SAVE_COURSE_STATUS_SUCCESS,
-          payload: res.data.saved,
+          type: GET_SAVE_COURSE_AND_STATUS_SUCCESS,
+          payload: {
+            status: res.data.saved,
+            singleCourse: singleCourse,
+          },
         })
       )
       .catch(() => {
-        dispatch({ type: GET_SAVE_COURSE_STATUS_FAILURE });
+        dispatch({ type: GET_SAVE_COURSE_AND_STATUS_FAILURE });
         toast.error('something went wrong');
       });
   };

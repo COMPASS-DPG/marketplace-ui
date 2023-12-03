@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BsBookmark, BsFillBookmarkFill, BsShare } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
@@ -17,16 +17,16 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
-  getSaveCourseStatus,
+  // getSaveCourseStatus,
   purchasesACourse,
   removeCourse,
   saveACourse,
 } from '@/redux/coursesDescription/action';
 import {
-  GET_SAVE_COURSE_STATUS_SUCCESS,
+  // GET_SAVE_COURSE_STATUS_SUCCESS,
   PURCHASE_COURSE_SUCCESS,
-  REMOVE_COURSE_SUCCESS,
   SAVE_COURSE_SUCCESS,
+  UNSAVE_COURSE_SUCCESS,
 } from '@/redux/coursesDescription/type';
 import { getMarketplaceCourses } from '@/redux/marketplace/action';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -87,7 +87,7 @@ export type SingleCourseType = {
   providerId: string;
 };
 
-const CourseDescription = ({ params }: { params: { id: string } }) => {
+const CourseDescription = () => {
   const userId = localStorage.getItem('userId') ?? '';
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
@@ -96,19 +96,15 @@ const CourseDescription = ({ params }: { params: { id: string } }) => {
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
 
-  const { savedCourses, mostPopularCourses, recommendedCourses } = useSelector(
-    (state: RootState) => state?.marketplace
+  const { status, singleCourse } = useSelector(
+    (state: RootState) => state?.singleCourse
   );
-  const { status } = useSelector((state: RootState) => state?.singleCourse);
+
   const [isSavedCourse, setIsSavedCourse] = useState<boolean>(status ?? false);
 
-  const allCourses = [
-    ...(savedCourses ? savedCourses : []),
-    ...(mostPopularCourses ? mostPopularCourses : []),
-    ...(recommendedCourses ? recommendedCourses : []),
-  ];
-
-  const singleCourse = allCourses?.find((item) => item?.courseId == params.id);
+  if (!singleCourse) {
+    router.push('/marketplace');
+  }
 
   //share course button
   const handleShareClick = async () => {
@@ -158,7 +154,8 @@ const CourseDescription = ({ params }: { params: { id: string } }) => {
       dispatch(
         removeCourse(userId, parseInt(Array.isArray(id) ? id[0] : id))
       ).then((res: unknown) => {
-        if ((res as { type?: string }).type === REMOVE_COURSE_SUCCESS) {
+        if ((res as { type?: string }).type === UNSAVE_COURSE_SUCCESS) {
+          dispatch(getMarketplaceCourses(userId));
           setIsSavedCourse(false);
           toast.success('course unsaved successfully');
         }
@@ -180,35 +177,13 @@ const CourseDescription = ({ params }: { params: { id: string } }) => {
 
       dispatch(saveACourse(userId, payload)).then((res: unknown) => {
         if ((res as { type?: string }).type === SAVE_COURSE_SUCCESS) {
+          dispatch(getMarketplaceCourses(userId));
           setIsSavedCourse(true);
           toast.success('course saved successfully');
         }
       });
     }
   };
-
-  const handleBack = () => {
-    dispatch(getMarketplaceCourses(userId));
-    router.back();
-  };
-
-  useEffect(() => {
-    if ((params.id, !singleCourse)) {
-      dispatch(getMarketplaceCourses(userId));
-    }
-  }, [params.id, dispatch, singleCourse, userId]);
-
-  useEffect(() => {
-    dispatch(getSaveCourseStatus(userId, parseInt(params.id))).then(
-      (res: unknown) => {
-        if (
-          (res as { type?: string }).type === GET_SAVE_COURSE_STATUS_SUCCESS
-        ) {
-          setIsSavedCourse((res as { payload?: boolean }).payload ?? false);
-        }
-      }
-    );
-  }, [userId, params.id, dispatch]);
 
   return (
     <div className={`${outfit.className}`}>
@@ -232,14 +207,14 @@ const CourseDescription = ({ params }: { params: { id: string } }) => {
        p-5 text-2xl font-semibold text-[#65758C]`}
       >
         <div
-          className='border-neutural-100 rounded-lg border'
-          onClick={handleBack}
+          className='rounded-lg border border-neutral-100'
+          onClick={() => router.push('/marketplace')}
         >
           <MdOutlineKeyboardArrowLeft width='24px' className=' m-2' />
         </div>
-        <div className='flex items-center justify-center gap-5'>
+        <div className='flex items-center justify-center gap-5 '>
           <div
-            className='border-neutural-100 rounded-lg border'
+            className='cursor-pointer rounded-lg border border-neutral-100'
             onClick={handleSavedIconClick}
           >
             {isSavedCourse ? (
@@ -249,7 +224,7 @@ const CourseDescription = ({ params }: { params: { id: string } }) => {
             )}
             {/* or */}
           </div>
-          <div className='border-neutural-100 rounded-lg border'>
+          <div className='cursor-pointer rounded-lg border border-neutral-100'>
             <BsShare
               width='24px'
               className=' m-2'

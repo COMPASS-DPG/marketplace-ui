@@ -1,10 +1,14 @@
 'use client';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 
 import { outfit } from '@/components/FontFamily';
 
+import { getSaveCourseAndStatus } from '@/redux/coursesDescription/action';
+import { GET_SAVE_COURSE_AND_STATUS_SUCCESS } from '@/redux/coursesDescription/type';
 import { CourseType } from '@/redux/marketplace/marketplaceReducer';
+import { AppDispatch } from '@/redux/store';
 
 import ColoredText from '../heading/ColoredText';
 import CourseImage from '../../../public/images/courseImage.png';
@@ -18,10 +22,27 @@ const CourseCard = ({
   courseDetails: CourseType;
   width?: string;
 }) => {
+  const userId = localStorage.getItem('userId') ?? '';
+  const router = useRouter();
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleRoute = () => {
+    dispatch(
+      getSaveCourseAndStatus(userId, courseDetails?.courseId, courseDetails)
+    ).then((res: unknown) => {
+      if (
+        (res as { type?: string }).type === GET_SAVE_COURSE_AND_STATUS_SUCCESS
+      ) {
+        router.push(`/course-description/${courseDetails?.courseId}`);
+      }
+    });
+  };
+
   return (
-    <Link href={`/course-description/${courseDetails?.courseId}`}>
+    <div onClick={handleRoute} className='cursor-pointer'>
       <div
-        className={`h-[156px] w-[${width}] rounded-2xl border bg-white shadow ${outfit.className}`}
+        className={`h-[156px] w-[${width}] rounded-2xl border bg-white shadow hover:bg-slate-100 ${outfit.className}`}
       >
         <div className='flex p-2'>
           <Image src={CourseImage} alt='courseImage' />
@@ -88,7 +109,7 @@ const CourseCard = ({
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 export default CourseCard;
