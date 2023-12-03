@@ -57,28 +57,31 @@ const PurchaseHistory = () => {
       {!isLoading && !isError && (
         <div>
           {/*  top balance section */}
-          <div className='flex flex-col items-center  pt-4'>
-            <div className='flex h-[70px] w-[360px] items-center justify-between rounded-xl bg-[#E8FFEB] p-2.5'>
-              <div>
-                <div className='flex items-center gap-3'>
-                  <Link href='/marketplace'>
-                    <LeftArrow width='24px' />
-                  </Link>
+          {/* <div className='flex flex-col items-center  pt-4'> */}
+          <div className='m-4 flex items-center justify-between rounded-xl bg-[#E8FFEB] p-2.5'>
+            <div>
+              <div className='flex items-center gap-3'>
+                <Link
+                  href='/marketplace'
+                  className='rounded-md p-1 hover:bg-[#c3f3ca]'
+                >
+                  <LeftArrow width='24px' />
+                </Link>
 
-                  <p className='text-base font-normal text-[#65758C]'>
-                    Wallet Balance
-                  </p>
-                </div>
-
-                <p className='pl-10 pt-1 text-[24px] font-semibold text-[#385B8B]'>
-                  {walletBalance}
+                <p className='text-base font-normal text-[#65758C]'>
+                  Wallet Balance
                 </p>
               </div>
-              <div>
-                <Wallet width='35px' />
-              </div>
+
+              <p className='pl-10 pt-1 text-[24px] font-semibold text-[#385B8B]'>
+                {walletBalance}
+              </p>
+            </div>
+            <div>
+              <Wallet width='35px' />
             </div>
           </div>
+          {/* </div> */}
           {/* heading */}
           <div className='m-5 mb-7 ml-4 mt-5'>
             <Heading heading='Purchase History' />

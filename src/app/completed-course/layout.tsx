@@ -6,13 +6,11 @@ import PullRefresh from '@/components/PullToRefresh';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <PullRefresh>
-        <>
-          <TitleNavbar title='Completed Course' />
-          {children}
-        </>
-      </PullRefresh>
-    </div>
+    <PullRefresh>
+      <>
+        <TitleNavbar title='Completed Course' />
+        {children}
+      </>
+    </PullRefresh>
   );
 }

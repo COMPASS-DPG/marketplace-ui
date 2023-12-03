@@ -19,7 +19,7 @@ const CourseBox = ({
         <Heading heading={heading} />
         <SeeAll heading='See all' redirectTo={handleSeeAllButtonClick} />
       </div>
-      <div className='flex  gap-2 px-4'>
+      <div className='flex gap-2 px-4'>
         <CourseSlides CoursesList={CoursesList} />
       </div>
     </div>

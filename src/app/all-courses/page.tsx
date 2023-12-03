@@ -67,14 +67,10 @@ const Courses = () => {
       {!isLoading && !isError && (
         <div>
           <TitleNavbar title={currentTitle} />
-          <div className='flex flex-col gap-5 pl-5'>
+          <div className='flex flex-col gap-5 px-3.5'>
             {currentCourses?.map((course) => {
               return (
-                <CourseCard
-                  key={course?.courseId}
-                  courseDetails={course}
-                  width='331px'
-                />
+                <CourseCard key={course?.courseId} courseDetails={course} />
               );
             })}
           </div>

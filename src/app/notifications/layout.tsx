@@ -6,13 +6,11 @@ import PullRefresh from '@/components/PullToRefresh';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='max-w-[374px]	'>
-      <PullRefresh>
-        <>
-          <TitleNavbar title='Notifications' />
-          {children}
-        </>
-      </PullRefresh>
-    </div>
+    <PullRefresh>
+      <>
+        <TitleNavbar title='Notifications' />
+        {children}
+      </>
+    </PullRefresh>
   );
 }
