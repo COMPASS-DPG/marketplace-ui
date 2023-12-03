@@ -207,14 +207,14 @@ const CourseDescription = () => {
        p-5 text-2xl font-semibold text-[#65758C]`}
       >
         <div
-          className='rounded-lg border border-neutral-100'
+          className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-100'
           onClick={() => router.push('/marketplace')}
         >
           <MdOutlineKeyboardArrowLeft width='24px' className=' m-2' />
         </div>
         <div className='flex items-center justify-center gap-5 '>
           <div
-            className='cursor-pointer rounded-lg border border-neutral-100'
+            className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-200'
             onClick={handleSavedIconClick}
           >
             {isSavedCourse ? (
@@ -224,7 +224,7 @@ const CourseDescription = () => {
             )}
             {/* or */}
           </div>
-          <div className='cursor-pointer rounded-lg border border-neutral-100'>
+          <div className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-200'>
             <BsShare
               width='24px'
               className=' m-2'
@@ -246,7 +246,7 @@ const CourseDescription = () => {
           {singleCourse?.title}
         </p>
         <div
-          className='my-1 flex items-center gap-1'
+          className='my-1 flex cursor-pointer items-center gap-1'
           onClick={() => setDetailsPopUp(true)}
         >
           <EditIcon width='22px' />
@@ -292,7 +292,7 @@ const CourseDescription = () => {
       <div className='px-5'>
         <div className='flex justify-center gap-5 '>
           <div
-            className={`${
+            className={`cursor-pointer ${
               option === 'overview'
                 ? 'border-b-2  border-[#272728] font-semibold'
                 : ''
@@ -304,7 +304,7 @@ const CourseDescription = () => {
             </p>
           </div>
           <div
-            className={`${
+            className={`cursor-pointer ${
               option === 'competencies'
                 ? 'border-b-2  border-[#272728] font-semibold'
                 : ''

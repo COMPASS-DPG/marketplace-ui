@@ -11,17 +11,10 @@ import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 import { AppDispatch } from '@/redux/store';
 
 import ColoredText from '../heading/ColoredText';
-import CourseImage from '../../../public/images/courseImage.png';
 
 import { EditIcon, Star } from '~/svg';
 
-const CourseCard = ({
-  courseDetails,
-  width = '311px',
-}: {
-  courseDetails: CourseType;
-  width?: string;
-}) => {
+const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
   const userId = localStorage.getItem('userId') ?? '';
   const router = useRouter();
 
@@ -40,12 +33,18 @@ const CourseCard = ({
   };
 
   return (
-    <div onClick={handleRoute} className='cursor-pointer'>
+    <div onClick={handleRoute} className='mx-2 cursor-pointer'>
       <div
-        className={`h-[156px] w-[${width}] rounded-2xl border bg-white shadow hover:bg-slate-100 ${outfit.className}`}
+        className={`rounded-2xl border bg-white p-1 shadow hover:bg-slate-100 ${outfit.className}`}
       >
         <div className='flex p-2'>
-          <Image src={CourseImage} alt='courseImage' />
+          <Image
+            src={courseDetails?.imageLink}
+            alt='courseImage'
+            width={100}
+            height={100}
+            className='rounded-xl'
+          />
           <div className='pl-2'>
             <p
               className={`w-[211px] ${outfit.className} text-[15px] font-bold text-zinc-800`}

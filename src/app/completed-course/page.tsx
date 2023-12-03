@@ -50,7 +50,7 @@ const CompletedCourse = () => {
     <div
       className={`px-[20px] ${outfit.className} flex flex-col gap-2 bg-[#fff]`}
     >
-      {CompleteCourselist.map((course: completeCourseType, index) => (
+      {CompleteCourselist?.map((course: completeCourseType, index) => (
         <SingleCompletedCourse key={index} courseDetail={course} />
       ))}
     </div>

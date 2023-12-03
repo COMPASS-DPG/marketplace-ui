@@ -18,7 +18,10 @@ const SingleCompetency = ({ competency }: { competency: propType }) => {
       <div className=' rounded-lg border p-2'>
         <div className='flex justify-between'>
           <p className='font-md text-[16px] leading-[18px]'>{name}</p>
-          <div onClick={() => setOpen(!open)}>
+          <div
+            onClick={() => setOpen(!open)}
+            className='cursor-pointer rounded-sm hover:bg-slate-200'
+          >
             {open ? (
               <MdKeyboardArrowUp size='20px' />
             ) : (

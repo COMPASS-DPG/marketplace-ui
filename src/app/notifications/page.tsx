@@ -66,20 +66,20 @@ const Notifications = () => {
               }).format(createdAtDate);
 
               return (
-                <div key={notification?.id} className=''>
+                <div key={notification?.id}>
                   <p className='text-[16px] font-medium text-[#272728]'>
                     {notification?.text}
                   </p>
                   <p className='mt-1 text-[13px] font-normal text-slate-500 text-opacity-60'>
                     {formattedDate}
                   </p>
-                  <div className='my-4 h-[1px] w-[320px] bg-slate-200' />
+                  <div className='my-4 h-[1px] max-w-[700px] bg-slate-200' />
                 </div>
               );
             })}
 
           {/* viewed */}
-          {viewedNotifications.map((notification) => {
+          {viewedNotifications?.map((notification) => {
             const createdAtDate = new Date(notification?.createdAt);
 
             const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -89,14 +89,14 @@ const Notifications = () => {
             }).format(createdAtDate);
 
             return (
-              <div key={notification?.id} className=''>
+              <div key={notification?.id}>
                 <p className='text-[16px] font-normal text-[#272728]'>
                   {notification?.text}
                 </p>
                 <p className='mt-1 text-[13px] font-normal text-slate-500 text-opacity-60'>
                   {formattedDate}
                 </p>
-                <div className='my-4 h-[1px] w-[320px] bg-slate-200' />
+                <div className='my-4 h-[1px] max-w-[700px] bg-slate-200' />
               </div>
             );
           })}

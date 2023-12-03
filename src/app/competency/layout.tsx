@@ -7,14 +7,12 @@ import PullRefresh from '@/components/PullToRefresh';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='max-w-sm'>
-      <PullRefresh>
-        <>
-          <TopNavbar />
-          {children}
-          <Footer />
-        </>
-      </PullRefresh>
-    </div>
+    <PullRefresh>
+      <>
+        <TopNavbar />
+        {children}
+        <Footer />
+      </>
+    </PullRefresh>
   );
 }

@@ -12,14 +12,14 @@ const TopNavbar = () => {
       border-solid border-gray-100 p-5 text-2xl font-semibold text-[#65758C] ${oxanium.className}`}
     >
       <div>COMPASS</div>
-      <div className='flex items-center justify-center gap-2'>
+      <div className='flex items-center justify-center gap-2 '>
         <Link href='/purchase-history'>
-          <div className='border-neutural-100 cursor-pointer rounded-lg border p-2'>
+          <div className='cursor-pointer rounded-lg border border-neutral-100 p-2 hover:bg-slate-200'>
             <Wallet width='24px' />
           </div>
         </Link>
         <Link href='/notifications'>
-          <div className='border-neutural-100 cursor-pointer rounded-lg border'>
+          <div className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-200'>
             <NotificationBell width='42px' />
           </div>
         </Link>
