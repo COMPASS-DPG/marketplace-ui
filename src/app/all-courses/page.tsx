@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CourseCard from '@/components/Course/CourseCard';
+import NoCoursesFound from '@/components/Course/NoCoursesFound';
 import TitleNavbar from '@/components/navbar/TitleNavbar';
 
 import Spinner from '@/app/components/Spinner';
@@ -68,11 +69,17 @@ const Courses = () => {
         <div>
           <TitleNavbar title={currentTitle} />
           <div className='flex flex-col gap-5 px-3.5'>
-            {currentCourses?.map((course) => {
-              return (
-                <CourseCard key={course?.courseId} courseDetails={course} />
-              );
-            })}
+            {currentCourses?.length > 0 ? (
+              currentCourses?.map((course) => {
+                return (
+                  <CourseCard key={course?.courseId} courseDetails={course} />
+                );
+              })
+            ) : (
+              <div className='mt-[100px]'>
+                <NoCoursesFound />
+              </div>
+            )}
           </div>
         </div>
       )}
