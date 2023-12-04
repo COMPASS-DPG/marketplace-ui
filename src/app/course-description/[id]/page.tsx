@@ -190,6 +190,7 @@ const CourseDescription = () => {
       {/* buy course popup */}
       {showPopUp && (
         <ButtonPopup
+          credit={singleCourse?.credits}
           purchaseCourse={purchaseCourse}
           setShowPopUp={setShowPopUp}
         />

@@ -3,9 +3,11 @@ import ButtonFill from '@/components/buttons/ButtonFill';
 const ButtonPopup = ({
   setShowPopUp,
   purchaseCourse,
+  credit,
 }: {
   setShowPopUp: (value: boolean) => void;
   purchaseCourse: () => void;
+  credit: number;
 }) => {
   return (
     <div className='fixed inset-0 z-50 flex'>
@@ -19,8 +21,8 @@ const ButtonPopup = ({
           </p>
 
           <p className='px-2 py-6 text-center text-[16px] font-normal leading-7 text-[#65758C] '>
-            Thank you for choosing us for your learning journey! Cr.145 will be
-            debited from your wallet for this purchase.
+            Thank you for choosing us for your learning journey! Cr. {credit}{' '}
+            will be debited from your wallet for this purchase.
           </p>
           <div className='flex justify-center gap-5 pt-4'>
             <ButtonFill
