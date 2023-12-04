@@ -28,7 +28,7 @@ const MarketPlace = () => {
   }, [dispatch, userId, savedCourses, mostPopularCourses, recommendedCourses]);
 
   return (
-    <div>
+    <div className='pb-4'>
       <div className='px-5 pt-4 '>
         <Heading heading='Hi Akshay Anand 👋' />
         <p

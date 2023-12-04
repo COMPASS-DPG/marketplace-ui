@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 
 import SwipeSlide from '@/components/SwipeSlide';
 
-import { CourseType } from '@/redux/marketplace/marketplaceReducer';
+import { OnGoingCoursesType } from '@/app/ongoing-courses/page';
 import { RootState } from '@/redux/store';
 
 const SwiperDiv = () => {
@@ -21,10 +21,12 @@ const SwiperDiv = () => {
         pagination={true}
         slidesPerView={1}
       >
-        {ongoingCourses?.map((course: CourseType, index: number) => (
-          <SwiperSlide key={index}>
-            <SwipeSlide course={course} />
-          </SwiperSlide>
+        {ongoingCourses?.map((course: OnGoingCoursesType, index: number) => (
+          <>
+            <SwiperSlide key={index}>
+              <SwipeSlide course={course} />
+            </SwiperSlide>
+          </>
         ))}
       </Swiper>
     </div>
