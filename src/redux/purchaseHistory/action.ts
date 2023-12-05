@@ -19,13 +19,14 @@ type PurchaseActionTypes = {
 
 export const fetchCredits = async (userId: string) => {
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/wallet/credits`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/wallet/credits`
   );
   return data.data.data.credits;
 };
+
 export const fetchPurchaseHistory = async (userId: string) => {
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/course/purchases`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchases`
   );
   return data.data.data.consumerCourses;
 };
@@ -39,7 +40,7 @@ export const getPurchaseHistory = (userId: string, userId2: string) => {
         fetchCredits(userId),
         fetchPurchaseHistory(userId2),
       ]);
-      const transectionObjArray = purchaseHistoryResponse.map(
+      const transectionObjArray = purchaseHistoryResponse?.map(
         (item: ConsumerCourse) => {
           return {
             id: item?.id,

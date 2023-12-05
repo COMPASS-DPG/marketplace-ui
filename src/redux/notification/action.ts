@@ -18,7 +18,9 @@ export const getAllNotifications =
   (userId: string) => (dispatch: Dispatch<NotificationActionTypes>) => {
     dispatch({ type: GET_NOTIFICATION_REQUEST });
     axios
-      .get(`http://localhost:4000/api/consumer/${userId}/notifications`)
+      .get(
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/notifications`
+      )
       .then((res) =>
         dispatch({
           type: GET_NOTIFICATION_SUCCESS,

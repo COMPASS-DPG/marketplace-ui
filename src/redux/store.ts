@@ -12,12 +12,14 @@ import { courseDescriptionReducer } from './coursesDescription/courseDescription
 import { marketplaceReducer } from './marketplace/marketplaceReducer';
 import { notificationReducer } from './notification/notificationReducer';
 import { purchaseHistoryReducer } from './purchaseHistory/purchaseHistoryReducer';
+import { searchCoursesReducer } from './searchCourses/searchReducer';
 
 const rootReducer = combineReducers({
   notification: notificationReducer,
   purchaseHistory: purchaseHistoryReducer,
   marketplace: marketplaceReducer,
   singleCourse: courseDescriptionReducer,
+  searchCourses: searchCoursesReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

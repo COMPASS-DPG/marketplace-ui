@@ -6,30 +6,35 @@ import { outfit } from '@/components/FontFamily';
 import MultipleButton from '@/components/Input/MultipleButton';
 import MultiSelectTag from '@/components/Input/MultiSelectTag';
 
-import { filterObjType, optionType } from '../app/search/page';
+import MultiSelectCreatable from './Input/MultiSelectCreatable';
+import {
+  COMPETENCY_OPTIONS,
+  LANGUAGE_OPTIONS,
+  PROVIDER_OPTIONS,
+} from './options';
+import { filterObjType } from '../app/search/page';
+
 const FilterCourse = ({
   filterObj,
   setFilterObj,
   setFilterOpen,
   SearchFilterOptions,
-  filterOption,
-  handleFiterButton,
+  handleFilterCourse,
 }: {
   filterObj: filterObjType;
   setFilterObj: (value: filterObjType) => void;
   setFilterOpen: (value: boolean) => void;
   SearchFilterOptions: () => void;
-  handleFiterButton: () => void;
-  filterOption: optionType;
+  handleFilterCourse: () => void;
 }) => {
   const handleChange = (name: string, value: string[] | string) => {
     setFilterObj({ ...filterObj, [name]: value });
   };
 
-  const handleFilterButton = () => {
+  const handleApplyFilter = () => {
     SearchFilterOptions();
     setFilterOpen(false);
-    handleFiterButton();
+    handleFilterCourse();
   };
 
   return (
@@ -39,7 +44,11 @@ const FilterCourse = ({
       {/* heading */}
       <div className='flex justify-between pb-6 font-semibold'>
         <p>Filter</p>
-        <RxCross2 size='20px' onClick={() => setFilterOpen(false)} />
+        <RxCross2
+          size='20px'
+          onClick={() => setFilterOpen(false)}
+          className='cursor-pointer'
+        />
       </div>
       {/*  Competencies*/}
       <div className='mb-5 mt-3 w-[335px]'>
@@ -48,8 +57,8 @@ const FilterCourse = ({
         </label>
         <MultiSelectTag
           onChange={(value) => handleChange('competencies', value)}
-          value={filterObj.competencies}
-          options={filterOption?.competency}
+          value={filterObj.competencies ?? []}
+          options={COMPETENCY_OPTIONS}
           placeholder='--Select--'
         />
       </div>
@@ -62,8 +71,8 @@ const FilterCourse = ({
         </label>
         <MultiSelectTag
           onChange={(value) => handleChange('courseProviders', value)}
-          value={filterObj.courseProviders}
-          options={filterOption?.courseProvider}
+          value={filterObj.courseProviders ?? []}
+          options={PROVIDER_OPTIONS}
           placeholder='--Select--'
         />
       </div>
@@ -73,17 +82,16 @@ const FilterCourse = ({
         <label className='pb-3 text-[16px] font-medium leading-6'>
           Language
         </label>
-        <MultiSelectTag
+        <MultiSelectCreatable
           onChange={(value) => handleChange('language', value)}
-          value={filterObj.language}
-          options={filterOption?.language}
+          value={filterObj.language ?? []}
+          options={LANGUAGE_OPTIONS}
           placeholder='--Select--'
         />
       </div>
       {/*sort by*/}
       <div className='mb-5 mt-3 w-[335px]'>
         <label className='text-[16px] font-medium leading-6'>Sort by</label>
-
         <MultipleButton
           options={['Popular', 'High Price', 'Low Price', 'Rating', 'Impact']}
           onClick={(val: string) => handleChange('sortBy', val)}
@@ -93,7 +101,7 @@ const FilterCourse = ({
 
       <div>
         <ButtonFill
-          onClick={handleFilterButton}
+          onClick={handleApplyFilter}
           classes='w-[335px] bg-[#385B8B] h-[40px] text-[#fff] py-1'
         >
           Apply Filters

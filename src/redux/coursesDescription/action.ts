@@ -75,7 +75,7 @@ export const removeCourse =
     dispatch({ type: UNSAVE_COURSE_REQUEST });
     return axios
       .patch(
-        `http://localhost:4000/api/consumer/${userId}/course/${courseId}/unsave`
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/${courseId}/unsave`
       )
       .then((res) =>
         dispatch({ type: UNSAVE_COURSE_SUCCESS, payload: res.data.data })
@@ -91,7 +91,10 @@ export const saveACourse =
   (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
     dispatch({ type: SAVE_COURSE_REQUEST });
     return axios
-      .post(`http://localhost:4000/api/consumer/${userId}/course/save`, payload)
+      .post(
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/save`,
+        payload
+      )
       .then((res) =>
         dispatch({ type: SAVE_COURSE_SUCCESS, payload: res.data.data })
       )
@@ -107,7 +110,7 @@ export const purchasesACourse =
     dispatch({ type: PURCHASE_COURSE_REQUEST });
     return axios
       .post(
-        `http://localhost:4000/api/consumer/${userId}/course/purchase`,
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase`,
         payload
       )
       .then((res) =>
@@ -125,7 +128,7 @@ export const getSaveCourseAndStatus =
     dispatch({ type: GET_SAVE_COURSE_AND_STATUS_REQUEST });
     return axios
       .get(
-        `http://localhost:4000/api/consumer/${userId}/course/${courseId}/save`
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/${courseId}/save`
       )
       .then((res) =>
         dispatch({

@@ -154,7 +154,7 @@ const CourseDescription = () => {
       dispatch(
         removeCourse(userId, parseInt(Array.isArray(id) ? id[0] : id))
       ).then((res: unknown) => {
-        if ((res as { type?: string }).type === UNSAVE_COURSE_SUCCESS) {
+        if ((res as { type?: string })?.type === UNSAVE_COURSE_SUCCESS) {
           dispatch(getMarketplaceCourses(userId));
           setIsSavedCourse(false);
           toast.success('course unsaved successfully');
@@ -176,7 +176,7 @@ const CourseDescription = () => {
       };
 
       dispatch(saveACourse(userId, payload)).then((res: unknown) => {
-        if ((res as { type?: string }).type === SAVE_COURSE_SUCCESS) {
+        if ((res as { type?: string })?.type === SAVE_COURSE_SUCCESS) {
           dispatch(getMarketplaceCourses(userId));
           setIsSavedCourse(true);
           toast.success('course saved successfully');

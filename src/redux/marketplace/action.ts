@@ -20,27 +20,27 @@ type marketplaceActionTypes = {
 
 export const getSavedCourse = async (userId: string) => {
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/course/saved`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
 export const getOngoingCourses = async (userId: string) => {
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/course/ongoing`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/ongoing`
   );
   return data.data.data.consumerCourses;
 };
 export const getMostPopularCourses = async (userId: string) => {
   // api is not correct for now
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/course/saved`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
 export const getRecommendedCourses = async (userId: string) => {
   // api is not correct for now
   const data = await axios.get(
-    `http://localhost:4000/api/consumer/${userId}/course/saved`
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
