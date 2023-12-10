@@ -25,21 +25,24 @@ export const getSearchCourses =
     });
     try {
       const response = await axios.get(
-        `https://2dbf-2409-40c4-fa-9e8a-819b-9379-f26f-afde.ngrok-free.app/courses/search?searchText=${searchText}`
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/course/search?searchInput=${searchText}`
       );
+      {
+        dispatch({
+          type: SEARCH_COURSES_SUCCESS,
+          payload: response?.data?.data?.searchResponse?.courses,
+        });
+      }
 
-      dispatch({
-        type: SEARCH_COURSES_SUCCESS,
-        payload: response?.data?.response?.data,
-      });
+      if (response?.data?.data?.searchResponse?.messageId) {
+        for (let i = 0; i < 5; i++) {
+          const res = await axios.get(
+            `https://2dbf-2409-40c4-fa-9e8a-819b-9379-f26f-afde.ngrok-free.app/courses/poll/${response?.data?.data?.searchResponse?.messageId}`
+          );
 
-      for (let i = 0; i < 5; i++) {
-        const res = await axios.get(
-          `https://2dbf-2409-40c4-fa-9e8a-819b-9379-f26f-afde.ngrok-free.app/courses/poll/${response?.data?.response?.messageId}`
-        );
-
-        dispatch({ type: SEARCH_COURSES_SUCCESS, payload: res.data });
-        await new Promise((resolve) => setTimeout(resolve, 5000)); // 5-second interval
+          dispatch({ type: SEARCH_COURSES_SUCCESS, payload: res.data });
+          await new Promise((resolve) => setTimeout(resolve, 5000)); // 5-second interval
+        }
       }
     } catch (error) {
       dispatch({ type: SEARCH_COURSES_FAILURE });

@@ -2,6 +2,9 @@ import {
   GET_SAVE_COURSE_AND_STATUS_FAILURE,
   GET_SAVE_COURSE_AND_STATUS_REQUEST,
   GET_SAVE_COURSE_AND_STATUS_SUCCESS,
+  PURCHASE_COURSE_FAILURE,
+  PURCHASE_COURSE_REQUEST,
+  PURCHASE_COURSE_SUCCESS,
   SAVE_COURSE_FAILURE,
   SAVE_COURSE_REQUEST,
   SAVE_COURSE_SUCCESS,
@@ -12,7 +15,8 @@ import {
 import { CourseType } from '../marketplace/marketplaceReducer';
 
 const init = {
-  status: null,
+  saveCourseStatus: null,
+  purchaseCourseStatus: null,
   singleCourse: null,
   isLoading: false,
   isError: false,
@@ -21,8 +25,9 @@ const init = {
 type actionType = {
   type: string;
   payload: {
-    status: boolean;
-    singleCourse: CourseType;
+    saveCourseStatus?: boolean;
+    purchaseCourseStatus?: boolean;
+    singleCourse?: CourseType;
   };
 };
 
@@ -41,8 +46,9 @@ export const courseDescriptionReducer = (
       return {
         ...state,
         isLoading: false,
-        status: payload.status,
-        singleCourse: payload.singleCourse,
+        saveCourseStatus: payload?.saveCourseStatus,
+        purchaseCourseStatus: payload?.purchaseCourseStatus,
+        singleCourse: payload?.singleCourse,
       };
     }
     case GET_SAVE_COURSE_AND_STATUS_FAILURE: {
@@ -62,6 +68,7 @@ export const courseDescriptionReducer = (
       return {
         ...state,
         isLoading: false,
+        saveCourseStatus: payload?.saveCourseStatus,
       };
     }
     case SAVE_COURSE_FAILURE: {
@@ -81,9 +88,30 @@ export const courseDescriptionReducer = (
       return {
         ...state,
         isLoading: false,
+        saveCourseStatus: payload?.saveCourseStatus,
       };
     }
     case UNSAVE_COURSE_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case PURCHASE_COURSE_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case PURCHASE_COURSE_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        purchaseCourseStatus: payload?.purchaseCourseStatus,
+      };
+    }
+    case PURCHASE_COURSE_FAILURE: {
       return {
         ...state,
         isLoading: false,

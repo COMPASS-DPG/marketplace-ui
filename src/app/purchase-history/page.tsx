@@ -57,7 +57,6 @@ const PurchaseHistory = () => {
       {!isLoading && !isError && (
         <div>
           {/*  top balance section */}
-          {/* <div className='flex flex-col items-center  pt-4'> */}
           <div className='m-4 flex items-center justify-between rounded-xl bg-[#E8FFEB] p-2.5'>
             <div>
               <div className='flex items-center gap-3'>
@@ -81,7 +80,6 @@ const PurchaseHistory = () => {
               <Wallet width='35px' />
             </div>
           </div>
-          {/* </div> */}
           {/* heading */}
           <div className='m-5 mb-7 ml-4 mt-5'>
             <Heading heading='Purchase History' />

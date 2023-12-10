@@ -5,7 +5,7 @@ import {
 } from './type';
 
 export type CourseType = {
-  courseId: number;
+  courseId: string;
   title: string;
   competency: {
     [key: string]: string[];

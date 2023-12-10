@@ -19,7 +19,7 @@ import {
 import { CourseType } from '../marketplace/marketplaceReducer';
 
 export type requestCourseType = {
-  courseId: number;
+  courseId: string;
   bppId?: string;
   title: string;
   description: string;
@@ -36,35 +36,19 @@ export type requestCourseType = {
   };
 };
 
-export type SingleCourseType = {
-  id: number;
-  title: string;
-  description: string;
-  courseLink: string;
-  imgLink: string;
-  credits: number;
-  language: string[];
-  duration: number;
-  competency: {
-    [key: string]: string[];
-  };
-  author: string;
-  avgRating: number;
-  updatedAt: string;
-  providerName: string;
-  numOfUsers: number;
-  providerId: string;
-};
-
 type CourseDescriptionActionTypes = {
   type: string;
-  payload?: requestCourseType;
+  payload?: {
+    saveCourseStatus?: boolean;
+    purchaseCourseStatus?: boolean;
+  };
 };
 
 type SingleCourseActionTypes = {
   type: string;
   payload?: {
-    status: boolean;
+    saveCourseStatus: boolean;
+    purchaseCourseStatus: boolean;
     singleCourse: CourseType;
   };
 };
@@ -75,10 +59,14 @@ export const removeCourse =
     dispatch({ type: UNSAVE_COURSE_REQUEST });
     return axios
       .patch(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/${courseId}/unsave`
+        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/unsave`,
+        { courseId: courseId }
       )
-      .then((res) =>
-        dispatch({ type: UNSAVE_COURSE_SUCCESS, payload: res.data.data })
+      .then(() =>
+        dispatch({
+          type: UNSAVE_COURSE_SUCCESS,
+          payload: { saveCourseStatus: false },
+        })
       )
       .catch(() => {
         dispatch({ type: UNSAVE_COURSE_FAILURE });
@@ -93,10 +81,13 @@ export const saveACourse =
     return axios
       .post(
         `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/save`,
-        payload
+        { ...payload, providerId: userId }
       )
-      .then((res) =>
-        dispatch({ type: SAVE_COURSE_SUCCESS, payload: res.data.data })
+      .then(() =>
+        dispatch({
+          type: SAVE_COURSE_SUCCESS,
+          payload: { saveCourseStatus: true },
+        })
       )
       .catch(() => {
         dispatch({ type: SAVE_COURSE_FAILURE });
@@ -113,8 +104,11 @@ export const purchasesACourse =
         `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase`,
         payload
       )
-      .then((res) =>
-        dispatch({ type: PURCHASE_COURSE_SUCCESS, payload: res.data.data })
+      .then(() =>
+        dispatch({
+          type: PURCHASE_COURSE_SUCCESS,
+          payload: { purchaseCourseStatus: true },
+        })
       )
       .catch(() => {
         dispatch({ type: PURCHASE_COURSE_FAILURE });
@@ -122,25 +116,51 @@ export const purchasesACourse =
       });
   };
 
-export const getSaveCourseAndStatus =
-  (userId: string, courseId: number, singleCourse: CourseType) =>
-  (dispatch: Dispatch<SingleCourseActionTypes>) => {
+// to check course is save or not
+const getSaveCourseStatus = async (userId: string, courseId: string) => {
+  const res = await axios.post(
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/save/status`,
+    { courseId: courseId }
+  );
+  return res.data.saved;
+};
+
+// to check course is purchased or not
+const getPurchaseCourseStatus = async (userId: string, courseId: string) => {
+  const res = await axios.post(
+    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase/status`,
+    { courseId: courseId }
+  );
+  return res.data.purchased;
+};
+
+export const getSaveCourseAndStatus = (
+  userId: string,
+  courseId: string,
+  singleCourse: CourseType
+) => {
+  return async (dispatch: Dispatch<SingleCourseActionTypes>) => {
     dispatch({ type: GET_SAVE_COURSE_AND_STATUS_REQUEST });
-    return axios
-      .get(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/${courseId}/save`
-      )
-      .then((res) =>
-        dispatch({
-          type: GET_SAVE_COURSE_AND_STATUS_SUCCESS,
-          payload: {
-            status: res.data.saved,
-            singleCourse: singleCourse,
-          },
-        })
-      )
-      .catch(() => {
-        dispatch({ type: GET_SAVE_COURSE_AND_STATUS_FAILURE });
-        toast.error('something went wrong');
+
+    try {
+      const [savedCourseStatus, purchaseCourseStatus] = await Promise.all([
+        getSaveCourseStatus(userId, courseId),
+        getPurchaseCourseStatus(userId, courseId),
+      ]);
+
+      return dispatch({
+        type: GET_SAVE_COURSE_AND_STATUS_SUCCESS,
+        payload: {
+          saveCourseStatus: savedCourseStatus,
+          purchaseCourseStatus: purchaseCourseStatus,
+          singleCourse: singleCourse,
+        },
       });
+    } catch (error) {
+      setTimeout(() => {
+        dispatch({ type: GET_SAVE_COURSE_AND_STATUS_FAILURE });
+        window.location.href = '/error/DataNotFound';
+      }, 5000);
+    }
   };
+};

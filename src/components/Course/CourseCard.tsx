@@ -25,7 +25,7 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
       getSaveCourseAndStatus(userId, courseDetails?.courseId, courseDetails)
     ).then((res: unknown) => {
       if (
-        (res as { type?: string }).type === GET_SAVE_COURSE_AND_STATUS_SUCCESS
+        (res as { type?: string })?.type === GET_SAVE_COURSE_AND_STATUS_SUCCESS
       ) {
         router.push(`/course-description/${courseDetails?.courseId}`);
       }

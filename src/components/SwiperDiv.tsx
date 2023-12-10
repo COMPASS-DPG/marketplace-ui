@@ -21,12 +21,10 @@ const SwiperDiv = () => {
         pagination={true}
         slidesPerView={1}
       >
-        {ongoingCourses?.map((course: OnGoingCoursesType, index: number) => (
-          <>
-            <SwiperSlide key={index}>
-              <SwipeSlide course={course} />
-            </SwiperSlide>
-          </>
+        {ongoingCourses?.map((course: OnGoingCoursesType) => (
+          <SwiperSlide key={course?.courseId}>
+            <SwipeSlide course={course} />
+          </SwiperSlide>
         ))}
       </Swiper>
     </div>

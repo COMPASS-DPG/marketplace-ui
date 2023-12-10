@@ -28,7 +28,7 @@ export default function HomePage() {
 
   React.useEffect(() => {
     dispatch(getMarketplaceCourses(userId)).then((res: unknown) => {
-      if ((res as { type?: string }).type === MARKETPLACE_SUCCESS) {
+      if ((res as { type?: string })?.type === MARKETPLACE_SUCCESS) {
         router.push('/marketplace');
       }
     });

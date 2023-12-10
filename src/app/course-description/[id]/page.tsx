@@ -17,13 +17,11 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
-  // getSaveCourseStatus,
   purchasesACourse,
   removeCourse,
   saveACourse,
 } from '@/redux/coursesDescription/action';
 import {
-  // GET_SAVE_COURSE_STATUS_SUCCESS,
   PURCHASE_COURSE_SUCCESS,
   SAVE_COURSE_SUCCESS,
   UNSAVE_COURSE_SUCCESS,
@@ -32,40 +30,6 @@ import { getMarketplaceCourses } from '@/redux/marketplace/action';
 import { AppDispatch, RootState } from '@/redux/store';
 
 import { EditIcon, Star } from '~/svg';
-
-export const getSingleCourseValue = (): SingleCourseType => {
-  return {
-    id: 1,
-    title: 'Introduction to Programming',
-    competency: {
-      'Pregnancy Identification': [
-        'Understands health of males and females and initial assessment protocols',
-        'Identifies pregnancy using Nischaya Kit',
-      ],
-      'Pregnancy Identification 2': [
-        'Understands health of males and females and initial assessment protocols',
-        'Identifies pregnancy using Nischaya Kit',
-      ],
-      'Pregnancy Identification 3': [
-        'Understands health of males and females and initial assessment protocols',
-        'Identifies pregnancy using Nischaya Kit',
-      ],
-    },
-    avgRating: 4,
-    credits: 100,
-    language: ['One', 'Two', 'Three'],
-    imgLink: '../../../public/images/courseImage.png',
-    courseLink: '../../../public/images/courseImage.png',
-    duration: 2,
-    description:
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatuNemo enim ipsam voluptatem quia volupta sit aspernatur aut odit aut fugit, sunt in culpa qui officia deserunt mollit anim id essed quia consequuntur maExcepteur sint occaecat  cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
-    author: 'dummyAuthore',
-    updatedAt: '24-aug-2024',
-    providerName: 'Dummy Provider',
-    numOfUsers: 47,
-    providerId: '123e4567-e89b-42d3-a456-556642440011',
-  };
-};
 
 export type SingleCourseType = {
   id: number;
@@ -96,15 +60,12 @@ const CourseDescription = () => {
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
 
-  const { status, singleCourse } = useSelector(
+  const { saveCourseStatus, purchaseCourseStatus, singleCourse } = useSelector(
     (state: RootState) => state?.singleCourse
   );
 
-  const [isSavedCourse, setIsSavedCourse] = useState<boolean>(status ?? false);
-
-  if (!singleCourse) {
-    router.push('/marketplace');
-  }
+  // const [isSavedCourse, setIsSavedCourse] = useState<boolean>(saveCourseStatus ?? false);
+  // const [isPurchaseCourse, setIsPurchaseCourse] = useState<boolean>(purchaseCourseStatus ?? false);
 
   //share course button
   const handleShareClick = async () => {
@@ -135,8 +96,10 @@ const CourseDescription = () => {
         providerId: singleCourse?.providerId,
         author: singleCourse?.author,
       };
+
       dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
         if ((res as { type?: string })?.type === PURCHASE_COURSE_SUCCESS) {
+          // setIsPurchaseCourse(true)
           router.push('/ongoing-courses');
         }
       });
@@ -145,19 +108,18 @@ const CourseDescription = () => {
       // Handle any errors that occur during the API call
       // eslint-disable-next-line no-console
       console.error('API call error:', error);
-
       setShowPopUp(false);
     }
   };
+
   const handleSavedIconClick = async () => {
-    if (isSavedCourse) {
+    if (saveCourseStatus) {
       dispatch(
         removeCourse(userId, parseInt(Array.isArray(id) ? id[0] : id))
       ).then((res: unknown) => {
         if ((res as { type?: string })?.type === UNSAVE_COURSE_SUCCESS) {
-          dispatch(getMarketplaceCourses(userId));
-          setIsSavedCourse(false);
           toast.success('course unsaved successfully');
+          dispatch(getMarketplaceCourses(userId));
         }
       });
     } else {
@@ -177,9 +139,8 @@ const CourseDescription = () => {
 
       dispatch(saveACourse(userId, payload)).then((res: unknown) => {
         if ((res as { type?: string })?.type === SAVE_COURSE_SUCCESS) {
-          dispatch(getMarketplaceCourses(userId));
-          setIsSavedCourse(true);
           toast.success('course saved successfully');
+          dispatch(getMarketplaceCourses(userId));
         }
       });
     }
@@ -218,7 +179,7 @@ const CourseDescription = () => {
             className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-200'
             onClick={handleSavedIconClick}
           >
-            {isSavedCourse ? (
+            {saveCourseStatus ? (
               <BsFillBookmarkFill width='24px' className=' m-2' />
             ) : (
               <BsBookmark width='24px' className=' m-2' />
@@ -331,8 +292,11 @@ const CourseDescription = () => {
           <ButtonFill
             onClick={() => setShowPopUp(true)}
             classes='flex-grow h-[45px] bg-[#385B8B] text-[#fff] mt-5'
+            disabled={purchaseCourseStatus}
           >
-            Buy Now &nbsp;&nbsp; Cr. {singleCourse?.credits}
+            {purchaseCourseStatus
+              ? 'Already Purchased'
+              : `Buy Now Cr. ${singleCourse?.credits}`}
           </ButtonFill>
         </div>
       </div>

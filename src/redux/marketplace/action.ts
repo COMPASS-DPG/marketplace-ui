@@ -67,8 +67,10 @@ export const getMarketplaceCourses = (userId: string) => {
         },
       });
     } catch (error) {
-      dispatch({ type: MARKETPLACE_FAILURE });
-      window.location.href = '/error/DataNotFound';
+      setTimeout(() => {
+        dispatch({ type: MARKETPLACE_FAILURE });
+        window.location.href = '/error/DataNotFound';
+      }, 5000);
     }
   };
 };

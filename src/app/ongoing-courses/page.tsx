@@ -1,12 +1,10 @@
 'use client';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import 'swiper/css';
 
 import SwipeSlide from '@/components/SwipeSlide';
 
-import { getMarketplaceCourses } from '@/redux/marketplace/action';
-import { AppDispatch, RootState } from '@/redux/store';
+import { RootState } from '@/redux/store';
 
 export type OnGoingCoursesType = {
   id: number;
@@ -38,16 +36,9 @@ export type OnGoingCoursesType = {
 };
 
 const OnGoingCourses = () => {
-  const userId = localStorage.getItem('userId') ?? '';
-  const dispatch: AppDispatch = useDispatch();
   const { ongoingCourses } = useSelector(
     (state: RootState) => state?.marketplace
   );
-  useEffect(() => {
-    if (!ongoingCourses) {
-      dispatch(getMarketplaceCourses(userId));
-    }
-  }, [dispatch, userId, ongoingCourses]);
 
   return (
     <div className='px-5'>
