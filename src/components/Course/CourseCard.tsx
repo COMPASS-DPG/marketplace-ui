@@ -54,23 +54,25 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
             <div
               className={`w-[211px] ${outfit.className} text-[13px] font-normal text-neutral-500`}
             >
-              {Object.keys(courseDetails?.competency)?.map((key, index) => {
-                if (index < 2) {
-                  return (
-                    <li className='font-semibold' key={key}>
-                      {key} (
-                      {courseDetails?.competency[key]
-                        .map(
-                          (level: string, levelIndex: number) =>
-                            `L${levelIndex + 1}`
-                        )
-                        .join(', ')}
-                      ){index == 1 && '....'}
-                    </li>
-                  );
+              {Object.keys(courseDetails?.competency ?? {})?.map(
+                (key, index) => {
+                  if (index < 2) {
+                    return (
+                      <li className='font-semibold' key={key}>
+                        {key} (
+                        {courseDetails?.competency[key]
+                          .map(
+                            (level: string, levelIndex: number) =>
+                              `L${levelIndex + 1}`
+                          )
+                          .join(', ')}
+                        ){index == 1 && '....'}
+                      </li>
+                    );
+                  }
+                  return null; // Skip rendering for keys beyond the first two and the ellipsis
                 }
-                return null; // Skip rendering for keys beyond the first two and the ellipsis
-              })}
+              )}
             </div>
           </div>
           {/* Icon and language list */}

@@ -57,7 +57,7 @@ const FilterCourse = ({
         </label>
         <MultiSelectTag
           onChange={(value) => handleChange('competencies', value)}
-          value={filterObj.competencies ?? []}
+          value={filterObj?.competencies ?? []}
           options={COMPETENCY_OPTIONS}
           placeholder='--Select--'
         />
@@ -71,7 +71,7 @@ const FilterCourse = ({
         </label>
         <MultiSelectTag
           onChange={(value) => handleChange('courseProviders', value)}
-          value={filterObj.courseProviders ?? []}
+          value={filterObj?.courseProviders ?? []}
           options={PROVIDER_OPTIONS}
           placeholder='--Select--'
         />
@@ -84,7 +84,7 @@ const FilterCourse = ({
         </label>
         <MultiSelectCreatable
           onChange={(value) => handleChange('language', value)}
-          value={filterObj.language ?? []}
+          value={filterObj?.language ?? []}
           options={LANGUAGE_OPTIONS}
           placeholder='--Select--'
         />

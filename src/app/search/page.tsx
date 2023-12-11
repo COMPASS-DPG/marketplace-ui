@@ -344,7 +344,9 @@ const SearchPage = () => {
       dispatch(getSearchCourses(searchText));
       setShowMostPopularCourses(false);
     } else {
-      toast.error('please enter course name');
+      toast.error('please enter course name', {
+        draggable: false,
+      });
     }
   };
 
@@ -358,21 +360,21 @@ const SearchPage = () => {
   const handleCross = (indexToRemove: number) => {
     const updatedOptions = [...selectedOption];
     const removeFilter = updatedOptions.splice(indexToRemove, 1);
-    if (removeFilter.join().includes('competencies')) {
+    if (removeFilter?.join()?.includes('competencies')) {
       setFilterObj((pre) => {
         return {
           ...pre,
           competencies: null,
         };
       });
-    } else if (removeFilter.join().includes('language')) {
+    } else if (removeFilter?.join()?.includes('language')) {
       setFilterObj((pre) => {
         return {
           ...pre,
           language: null,
         };
       });
-    } else if (removeFilter.join().includes('provider')) {
+    } else if (removeFilter?.join()?.includes('provider')) {
       setFilterObj((pre) => {
         return {
           ...pre,

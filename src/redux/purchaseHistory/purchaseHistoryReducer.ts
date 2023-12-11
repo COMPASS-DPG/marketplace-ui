@@ -36,8 +36,8 @@ export const purchaseHistoryReducer = (
       return {
         ...state,
         isLoading: false,
-        purchaseHistory: payload.purchaseHistory,
-        walletBalance: payload.walletBalance,
+        purchaseHistory: payload?.purchaseHistory,
+        walletBalance: payload?.walletBalance,
       };
     }
     case GET_PURCHASE_HISTORY_FAILURE: {

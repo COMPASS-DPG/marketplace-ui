@@ -18,22 +18,25 @@ const SwipeSlide = ({ course }: { course: OnGoingCoursesType }) => {
       <p
         className={`${outfit.className} text-[13px] font-normal text-neutral-500`}
       >
-        {Object.keys(course?.CourseInfo.competency ?? {})?.map((key, index) => {
-          if (index < 2) {
-            return (
-              <li key={key}>
-                {key} (
-                {course.CourseInfo.competency[key]
-                  .map(
-                    (level: string, levelIndex: number) => `L${levelIndex + 1}`
-                  )
-                  .join(', ')}
-                ),{index == 1 && '....'}
-              </li>
-            );
+        {Object.keys(course?.CourseInfo?.competency ?? {})?.map(
+          (key, index) => {
+            if (index < 2) {
+              return (
+                <li key={key}>
+                  {key} (
+                  {course?.CourseInfo?.competency[key]
+                    .map(
+                      (level: string, levelIndex: number) =>
+                        `L${levelIndex + 1}`
+                    )
+                    .join(', ')}
+                  ),{index == 1 && '....'}
+                </li>
+              );
+            }
+            return null; // Skip rendering for keys beyond the first two and the ellipsis
           }
-          return null; // Skip rendering for keys beyond the first two and the ellipsis
-        })}
+        )}
       </p>
       <div className='mb-2 mt-2 flex justify-between'>
         <p className='text-[#092724]` text-[14px] font-normal '>

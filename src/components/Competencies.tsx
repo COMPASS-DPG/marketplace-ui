@@ -7,7 +7,7 @@ type CompetencyType = {
 const Competencies = ({ competency }: { competency: CompetencyType }) => {
   return (
     <div className='py-4 '>
-      {Object.keys(competency).map((key, index) => {
+      {Object.keys(competency ?? {})?.map((key, index) => {
         return (
           <SingleCompetency
             key={index}

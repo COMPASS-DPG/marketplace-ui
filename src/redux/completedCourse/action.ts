@@ -67,13 +67,17 @@ export const giveFeedbackRating =
         payload
       )
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data.message, {
+          draggable: false,
+        });
         dispatch({
           type: FEEDBACK_COURSE_SUCCESS,
         });
       })
       .catch(() => {
-        toast.error('something went wrong');
+        toast.error('something went wrong', {
+          draggable: false,
+        });
         dispatch({ type: FEEDBACK_FAILURE });
       });
   };

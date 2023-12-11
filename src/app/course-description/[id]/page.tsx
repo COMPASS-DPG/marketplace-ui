@@ -60,57 +60,43 @@ const CourseDescription = () => {
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
 
-  const { saveCourseStatus, purchaseCourseStatus, singleCourse } = useSelector(
-    (state: RootState) => state?.singleCourse
-  );
-
-  // const [isSavedCourse, setIsSavedCourse] = useState<boolean>(saveCourseStatus ?? false);
-  // const [isPurchaseCourse, setIsPurchaseCourse] = useState<boolean>(purchaseCourseStatus ?? false);
-
-  //share course button
-  const handleShareClick = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        title: `${singleCourse?.title}`,
-        text: 'Check out this amazing Course!',
-        url: window.location.href,
-      });
-    } else {
-      toast.error('Share option is not supported in this browser.');
-    }
-  };
+  const { saveCourseStatus, purchaseCourseStatus, singleCourse, courseLink } =
+    useSelector((state: RootState) => state?.singleCourse);
 
   const purchaseCourse = async () => {
-    try {
-      const payload = {
-        courseId: singleCourse?.courseId,
-        title: singleCourse?.title,
-        description: singleCourse?.description,
-        credits: singleCourse?.credits,
-        imageLink: singleCourse?.imageLink,
-        language: singleCourse?.language,
-        courseLink: singleCourse?.courseLink,
-        providerName: singleCourse?.providerName,
-        avgRating: singleCourse?.avgRating,
-        competency: singleCourse?.competency,
-        providerId: singleCourse?.providerId,
-        author: singleCourse?.author,
-      };
+    const payload = {
+      courseId: singleCourse?.courseId,
+      title: singleCourse?.title,
+      description: singleCourse?.description,
+      credits: singleCourse?.credits,
+      imageLink: singleCourse?.imageLink,
+      language: singleCourse?.language,
+      courseLink: singleCourse?.courseLink,
+      providerName: singleCourse?.providerName,
+      avgRating: singleCourse?.avgRating,
+      competency: singleCourse?.competency,
+      providerId: singleCourse?.providerId,
+      author: singleCourse?.author,
+    };
 
-      dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
-        if ((res as { type?: string })?.type === PURCHASE_COURSE_SUCCESS) {
-          toast.success('course saved successfully');
-          dispatch(getMarketplaceCourses(userId));
-          setShowPopUp(false);
-          router.push('/ongoing-courses');
-        }
+    dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
+      if ((res as { type?: string })?.type === PURCHASE_COURSE_SUCCESS) {
+        toast.success('course purchase successfully', {
+          draggable: false,
+        });
+        dispatch(getMarketplaceCourses(userId));
+        setShowPopUp(false);
+      }
+    });
+  };
+
+  const handleCourseContinue = () => {
+    if (courseLink) {
+      window.open(courseLink, '_blank');
+    } else {
+      toast.error('something went wrong try after some time', {
+        draggable: false,
       });
-    } catch (error) {
-      toast.error('something went wrong');
-      // Handle any errors that occur during the API call
-      // eslint-disable-next-line no-console
-      console.error('API call error:', error);
-      setShowPopUp(false);
     }
   };
 
@@ -119,7 +105,9 @@ const CourseDescription = () => {
       dispatch(removeCourse(userId, singleCourse?.courseId)).then(
         (res: unknown) => {
           if ((res as { type?: string })?.type === UNSAVE_COURSE_SUCCESS) {
-            toast.success('course unsaved successfully');
+            toast.success('course unsaved successfully', {
+              draggable: false,
+            });
             dispatch(getMarketplaceCourses(userId));
           }
         }
@@ -143,7 +131,9 @@ const CourseDescription = () => {
 
       dispatch(saveACourse(userId, payload)).then((res: unknown) => {
         if ((res as { type?: string })?.type === SAVE_COURSE_SUCCESS) {
-          toast.success('course saved successfully');
+          toast.success('course saved successfully', {
+            draggable: false,
+          });
           dispatch(getMarketplaceCourses(userId));
         }
       });
@@ -191,11 +181,7 @@ const CourseDescription = () => {
             {/* or */}
           </div>
           <div className='cursor-pointer rounded-lg border border-neutral-100 hover:bg-slate-200'>
-            <BsShare
-              width='24px'
-              className=' m-2'
-              onClick={() => handleShareClick()}
-            />
+            <BsShare width='24px' className=' m-2' />
           </div>
         </div>
       </div>
@@ -294,12 +280,13 @@ const CourseDescription = () => {
         {/* bottom button */}
         <div className='flex justify-center'>
           <ButtonFill
-            onClick={() => setShowPopUp(true)}
+            onClick={() =>
+              purchaseCourseStatus ? handleCourseContinue() : setShowPopUp(true)
+            }
             classes='flex-grow h-[45px] bg-[#385B8B] text-[#fff] mt-5'
-            disabled={purchaseCourseStatus}
           >
             {purchaseCourseStatus
-              ? 'Purchased'
+              ? 'Continue'
               : `Buy Now Cr. ${singleCourse?.credits}`}
           </ButtonFill>
         </div>

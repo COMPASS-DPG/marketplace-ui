@@ -15,7 +15,7 @@ const SingleCompletedCourse = ({
 }: {
   courseDetail: CompletedCourseType;
 }) => {
-  const [start, setStar] = useState(parseInt(courseDetail?.rating));
+  const [start, setStar] = useState(parseInt(courseDetail?.rating ?? 0));
   const dispatch: AppDispatch = useDispatch();
   const handleClick = (index: number) => {
     const payload = {
@@ -44,7 +44,7 @@ const SingleCompletedCourse = ({
           </p>
         </div>
         <div className='flex flex-grow items-center gap-3'>
-          {Array.from({ length: start }).map((_, index) => (
+          {Array.from({ length: start })?.map((_, index) => (
             <FaStar
               key={index}
               size='20'

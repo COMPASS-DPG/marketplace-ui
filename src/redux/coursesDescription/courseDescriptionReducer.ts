@@ -18,6 +18,7 @@ const init = {
   saveCourseStatus: null,
   purchaseCourseStatus: null,
   singleCourse: null,
+  courseLink: null,
   isLoading: false,
   isError: false,
 };
@@ -27,6 +28,7 @@ type actionType = {
   payload: {
     saveCourseStatus?: boolean;
     purchaseCourseStatus?: boolean;
+    courseLink?: string;
     singleCourse?: CourseType;
   };
 };
@@ -49,6 +51,7 @@ export const courseDescriptionReducer = (
         saveCourseStatus: payload?.saveCourseStatus,
         purchaseCourseStatus: payload?.purchaseCourseStatus,
         singleCourse: payload?.singleCourse,
+        courseLink: payload.courseLink,
       };
     }
     case GET_SAVE_COURSE_AND_STATUS_FAILURE: {
@@ -109,6 +112,7 @@ export const courseDescriptionReducer = (
         ...state,
         isLoading: false,
         purchaseCourseStatus: payload?.purchaseCourseStatus,
+        courseLink: payload?.courseLink,
       };
     }
     case PURCHASE_COURSE_FAILURE: {
