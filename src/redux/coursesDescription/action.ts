@@ -54,7 +54,7 @@ type SingleCourseActionTypes = {
 };
 
 export const removeCourse =
-  (userId: string, courseId: number) =>
+  (userId: string, courseId: string) =>
   (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
     dispatch({ type: UNSAVE_COURSE_REQUEST });
     return axios

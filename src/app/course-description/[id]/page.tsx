@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BsBookmark, BsFillBookmarkFill, BsShare } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
@@ -55,7 +55,7 @@ const CourseDescription = () => {
   const userId = localStorage.getItem('userId') ?? '';
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
-  const { id } = useParams();
+  // const { id } = useParams();
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
@@ -99,7 +99,9 @@ const CourseDescription = () => {
 
       dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
         if ((res as { type?: string })?.type === PURCHASE_COURSE_SUCCESS) {
-          // setIsPurchaseCourse(true)
+          toast.success('course saved successfully');
+          dispatch(getMarketplaceCourses(userId));
+          setShowPopUp(false);
           router.push('/ongoing-courses');
         }
       });
@@ -114,21 +116,23 @@ const CourseDescription = () => {
 
   const handleSavedIconClick = async () => {
     if (saveCourseStatus) {
-      dispatch(
-        removeCourse(userId, parseInt(Array.isArray(id) ? id[0] : id))
-      ).then((res: unknown) => {
-        if ((res as { type?: string })?.type === UNSAVE_COURSE_SUCCESS) {
-          toast.success('course unsaved successfully');
-          dispatch(getMarketplaceCourses(userId));
+      dispatch(removeCourse(userId, singleCourse?.courseId)).then(
+        (res: unknown) => {
+          if ((res as { type?: string })?.type === UNSAVE_COURSE_SUCCESS) {
+            toast.success('course unsaved successfully');
+            dispatch(getMarketplaceCourses(userId));
+          }
         }
-      });
+      );
     } else {
       const payload = {
         courseId: singleCourse?.courseId,
         title: singleCourse?.title,
         description: singleCourse?.description,
         credits: singleCourse?.credits,
-        imageLink: singleCourse?.imageLink,
+        imageLink: singleCourse?.imageLink
+          ? singleCourse?.imageLink
+          : singleCourse?.imgLink,
         language: singleCourse?.language,
         courseLink: singleCourse?.courseLink,
         providerName: singleCourse?.providerName,
@@ -295,7 +299,7 @@ const CourseDescription = () => {
             disabled={purchaseCourseStatus}
           >
             {purchaseCourseStatus
-              ? 'Already Purchased'
+              ? 'Purchased'
               : `Buy Now Cr. ${singleCourse?.credits}`}
           </ButtonFill>
         </div>
