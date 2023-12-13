@@ -17,6 +17,7 @@ import BasicPopup from '@/components/popUp/BasicPopup';
 import ButtonPopup from '@/components/popUp/ButtonPopup';
 
 import {
+  getPurchaseCourseStatus,
   purchasesACourse,
   removeCourse,
   saveACourse,
@@ -94,7 +95,9 @@ const CourseDescription = () => {
     if (courseLink) {
       window.open(courseLink, '_blank');
     } else {
-      toast.error('something went wrong try after some time', {
+      // if course link is null
+      dispatch(getPurchaseCourseStatus(userId, singleCourse?.courseId));
+      toast.warn('updating your course please wait', {
         draggable: false,
       });
     }
@@ -150,7 +153,7 @@ const CourseDescription = () => {
           setShowPopUp={setShowPopUp}
         />
       )}
-      {/* authore Details popup */}
+      {/* author Details popup */}
       {DetailsPopUp && (
         <BasicPopup
           setDetailsPopUp={setDetailsPopUp}
@@ -239,7 +242,7 @@ const CourseDescription = () => {
         <p>{singleCourse?.numberOfPurchases} Members</p>
       </div>
       <hr className='mb-5 mt-4 h-[1px] text-[#F4F4F4]' />
-      {/* Overview and compitency */}
+      {/* Overview and competency */}
 
       <div className='px-5'>
         <div className='flex justify-center gap-5 '>

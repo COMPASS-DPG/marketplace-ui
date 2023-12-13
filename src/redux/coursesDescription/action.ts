@@ -102,12 +102,36 @@ export const saveACourse =
   };
 
 // to check course is purchased or not
-const getPurchaseCourseStatus = async (userId: string, courseId: string) => {
+const handlePurchaseCourseStatus = async (userId: string, courseId: string) => {
   const res = await axios.post(
     `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase/status`,
     { courseId: courseId }
   );
   return res.data.data;
+};
+
+export const getPurchaseCourseStatus = (userId: string, courseId: string) => {
+  return async (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
+    dispatch({ type: PURCHASE_COURSE_REQUEST });
+    try {
+      const status = await handlePurchaseCourseStatus(userId, courseId);
+
+      return dispatch({
+        type: PURCHASE_COURSE_SUCCESS,
+        payload: {
+          purchaseCourseStatus: status?.purchased,
+          courseLink: status?.courseLink,
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        dispatch({ type: PURCHASE_COURSE_FAILURE });
+        toast.error(error?.response?.data?.message, {
+          draggable: false,
+        });
+      }
+    }
+  };
 };
 
 export const purchasesACourse = (
@@ -121,7 +145,10 @@ export const purchasesACourse = (
         `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase`,
         payload
       );
-      const status = await getPurchaseCourseStatus(userId, payload?.courseId);
+      const status = await handlePurchaseCourseStatus(
+        userId,
+        payload?.courseId
+      );
       return dispatch({
         type: PURCHASE_COURSE_SUCCESS,
         payload: {
@@ -160,7 +187,7 @@ export const getSaveCourseAndStatus = (
     try {
       const [savedCourseStatus, purchaseCourseStatus] = await Promise.all([
         getSaveCourseStatus(userId, courseId),
-        getPurchaseCourseStatus(userId, courseId),
+        handlePurchaseCourseStatus(userId, courseId),
       ]);
       return dispatch({
         type: GET_SAVE_COURSE_AND_STATUS_SUCCESS,

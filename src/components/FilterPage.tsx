@@ -7,6 +7,7 @@ import MultipleButton from '@/components/Input/MultipleButton';
 import MultiSelectTag from '@/components/Input/MultiSelectTag';
 
 import MultiSelectCreatable from './Input/MultiSelectCreatable';
+import SelectTag from './Input/SelectTag';
 import {
   COMPETENCY_OPTIONS,
   LANGUAGE_OPTIONS,
@@ -55,12 +56,19 @@ const FilterCourse = ({
         <label className='pb-3 text-[16px] font-medium leading-6'>
           Competencies
         </label>
-        <MultiSelectTag
+        <SelectTag
+          onChange={(value) => handleChange('competencies', value)}
+          value={filterObj?.competencies ?? ''}
+          options={COMPETENCY_OPTIONS}
+          placeholder='--Select--'
+        />
+
+        {/* <MultiSelectTag
           onChange={(value) => handleChange('competencies', value)}
           value={filterObj?.competencies ?? []}
           options={COMPETENCY_OPTIONS}
           placeholder='--Select--'
-        />
+        /> */}
       </div>
 
       {/*  third party provider*/}

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -11,7 +11,6 @@ import Heading from '@/components/heading/Heading';
 import SearchInput from '@/components/Input/SearchInput';
 import SearchTopbar from '@/components/navbar/SearchTopbar';
 
-import { getMarketplaceCourses } from '@/redux/marketplace/action';
 import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 import { getSearchCourses } from '@/redux/searchCourses/action';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -219,7 +218,7 @@ import { NotFound } from '~/svg';
 
 const getInitialValue2 = () => {
   return {
-    competencies: null,
+    competencies: '',
     courseProviders: null,
     language: null,
     sortBy: '',
@@ -227,7 +226,7 @@ const getInitialValue2 = () => {
 };
 
 export type filterObjType = {
-  competencies: string[] | null;
+  competencies: string;
   courseProviders: string[] | null;
   language: string[] | null;
   sortBy: string;
@@ -253,11 +252,7 @@ const filterData = (data: CourseType[], filterObj: filterObjType) => {
 
   let filteredResponse = data?.filter((course: CourseType) => {
     const competencyMatch =
-      competencies?.length === 0 ||
-      !competencies ||
-      competencies?.some(
-        (competency: string) => course?.competency[competency]?.length > 0
-      );
+      !competencies || course?.competency[competencies]?.length > 0;
 
     const languageMatch =
       language?.length === 0 ||
@@ -283,8 +278,6 @@ const filterData = (data: CourseType[], filterObj: filterObjType) => {
 };
 
 const SearchPage = () => {
-  const userId = localStorage.getItem('userId') ?? '';
-
   // will set text to search courses
   const [searchText, setSearchText] = useState<string>('');
 
@@ -321,11 +314,7 @@ const SearchPage = () => {
   const SearchFilterOptions = () => {
     const { competencies, courseProviders, language, sortBy } = filterObj;
     setSelectedOption([]);
-    if (competencies?.length)
-      setSelectedOption((prev) => [
-        ...prev,
-        `${competencies?.length} competencies`,
-      ]);
+    if (competencies) setSelectedOption((prev) => [...prev, competencies]);
     if (courseProviders?.length)
       setSelectedOption((prev) => [
         ...prev,
@@ -357,14 +346,14 @@ const SearchPage = () => {
   };
 
   // will remove filters and set the filters to null
-  const handleCross = (indexToRemove: number) => {
+  const handleDeleteSelectedOption = (indexToRemove: number) => {
     const updatedOptions = [...selectedOption];
     const removeFilter = updatedOptions.splice(indexToRemove, 1);
-    if (removeFilter?.join()?.includes('competencies')) {
+    if (removeFilter?.join()?.includes('High Price' || 'Low Price')) {
       setFilterObj((pre) => {
         return {
           ...pre,
-          competencies: null,
+          sortBy: '',
         };
       });
     } else if (removeFilter?.join()?.includes('language')) {
@@ -385,18 +374,12 @@ const SearchPage = () => {
       setFilterObj((pre) => {
         return {
           ...pre,
-          sortBy: '',
+          competencies: '',
         };
       });
     }
     setSelectedOption(updatedOptions);
   };
-
-  useEffect(() => {
-    if (!mostPopularCourses) {
-      dispatch(getMarketplaceCourses(userId));
-    }
-  }, [dispatch, userId, mostPopularCourses]);
 
   // filter input fields
   if (isFilterOpen) {
@@ -435,7 +418,7 @@ const SearchPage = () => {
                 <p>{option}</p>
                 <RxCross1
                   size='12'
-                  onClick={() => handleCross(index)}
+                  onClick={() => handleDeleteSelectedOption(index)}
                   style={{ cursor: 'pointer' }}
                 />
               </div>
