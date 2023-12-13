@@ -36,6 +36,7 @@ export const purchaseHistoryReducer = (
       return {
         ...state,
         isLoading: false,
+        isError: false,
         purchaseHistory: payload?.purchaseHistory,
         walletBalance: payload?.walletBalance,
       };

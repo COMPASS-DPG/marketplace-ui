@@ -32,15 +32,14 @@ export type ConsumerCourse = {
 
 const PurchaseHistory = () => {
   const userId = localStorage.getItem('userId') ?? '';
-  const userId2 = '123e4567-e89b-42d3-a456-556642440001';
   const { walletBalance, purchaseHistory, isLoading, isError } = useSelector(
     (state: RootState) => state.purchaseHistory
   );
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPurchaseHistory(userId, userId2));
-  }, [dispatch, userId, userId2]);
+    dispatch(getPurchaseHistory(userId));
+  }, [dispatch, userId]);
 
   return (
     <div className={`${outfit.className}`}>

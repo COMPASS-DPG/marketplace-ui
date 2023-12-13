@@ -1,7 +1,7 @@
 'use client';
 
 import Head from 'next/head';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -22,17 +22,23 @@ import { AppDispatch } from '@/redux/store';
 // to customize the default configuration.
 
 export default function HomePage() {
-  const userId = localStorage.getItem('userId') ?? '';
+  const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
 
   React.useEffect(() => {
+    let userId = localStorage.getItem('userId') || '';
+    const queryId = searchParams.get('userId') || '';
+    if (queryId.trim() !== '') {
+      userId = queryId;
+      localStorage.setItem('userId', queryId);
+    }
     dispatch(getMarketplaceCourses(userId)).then((res: unknown) => {
       if ((res as { type?: string })?.type === MARKETPLACE_SUCCESS) {
         router.push('/marketplace');
       }
     });
-  }, [dispatch, userId, router]);
+  }, [dispatch, searchParams, router]);
   return (
     <main>
       <Head>

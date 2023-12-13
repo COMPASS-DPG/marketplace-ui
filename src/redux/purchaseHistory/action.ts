@@ -31,16 +31,16 @@ export const fetchPurchaseHistory = async (userId: string) => {
   return data.data.data.consumerCourses;
 };
 
-export const getPurchaseHistory = (userId: string, userId2: string) => {
+export const getPurchaseHistory = (userId: string) => {
   return async (dispatch: Dispatch<PurchaseActionTypes>) => {
     dispatch({ type: GET_PURCHASE_HISTORY_REQUEST });
 
     try {
       const [creditsResponse, purchaseHistoryResponse] = await Promise.all([
         fetchCredits(userId),
-        fetchPurchaseHistory(userId2),
+        fetchPurchaseHistory(userId),
       ]);
-      const transectionObjArray = purchaseHistoryResponse?.map(
+      const transactionObjArray = purchaseHistoryResponse?.map(
         (item: ConsumerCourse) => {
           return {
             id: item?.id,
@@ -55,7 +55,7 @@ export const getPurchaseHistory = (userId: string, userId2: string) => {
         type: GET_PURCHASE_HISTORY_SUCCESS,
         payload: {
           walletBalance: creditsResponse,
-          purchaseHistory: transectionObjArray,
+          purchaseHistory: transactionObjArray,
         },
       });
     } catch (error) {
