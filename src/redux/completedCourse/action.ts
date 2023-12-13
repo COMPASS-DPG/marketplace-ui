@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 import { toast } from 'react-toastify';
@@ -63,7 +64,7 @@ export const giveFeedbackRating =
     dispatch({ type: FEEDBACK_COURSE_REQUEST });
     return axios
       .patch(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/feedback`,
+        `${marketBackendUrl}/api/consumer/${userId}/course/feedback`,
         payload
       )
       .then((res) => {
@@ -86,9 +87,7 @@ export const getCompletedCourse =
   (userId: string) => (dispatch: Dispatch<CompletedCourseActionTypes>) => {
     dispatch({ type: GET_COMPLETED_COURSE_REQUEST });
     return axios
-      .get(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchases`
-      )
+      .get(`${marketBackendUrl}/api/consumer/${userId}/course/purchases`)
       .then((res) => {
         dispatch({
           type: GET_COMPLETED_COURSE_SUCCESS,

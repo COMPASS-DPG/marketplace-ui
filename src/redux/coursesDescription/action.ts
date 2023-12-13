@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 import { toast } from 'react-toastify';
@@ -60,10 +61,9 @@ export const removeCourse =
   (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
     dispatch({ type: UNSAVE_COURSE_REQUEST });
     return axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/unsave`,
-        { courseId: courseId }
-      )
+      .patch(`${marketBackendUrl}/api/consumer/${userId}/course/unsave`, {
+        courseId: courseId,
+      })
       .then(() =>
         dispatch({
           type: UNSAVE_COURSE_SUCCESS,
@@ -83,10 +83,10 @@ export const saveACourse =
   (dispatch: Dispatch<CourseDescriptionActionTypes>) => {
     dispatch({ type: SAVE_COURSE_REQUEST });
     return axios
-      .post(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/save`,
-        { ...payload, providerId: userId }
-      )
+      .post(`${marketBackendUrl}/api/consumer/${userId}/course/save`, {
+        ...payload,
+        providerId: userId,
+      })
       .then(() =>
         dispatch({
           type: SAVE_COURSE_SUCCESS,
@@ -104,7 +104,7 @@ export const saveACourse =
 // to check course is purchased or not
 const handlePurchaseCourseStatus = async (userId: string, courseId: string) => {
   const res = await axios.post(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase/status`,
+    `${marketBackendUrl}/api/consumer/${userId}/course/purchase/status`,
     { courseId: courseId }
   );
   return res.data.data;
@@ -142,7 +142,7 @@ export const purchasesACourse = (
     dispatch({ type: PURCHASE_COURSE_REQUEST });
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchase`,
+        `${marketBackendUrl}/api/consumer/${userId}/course/purchase`,
         payload
       );
       const status = await handlePurchaseCourseStatus(
@@ -170,7 +170,7 @@ export const purchasesACourse = (
 // to check course is save or not
 const getSaveCourseStatus = async (userId: string, courseId: string) => {
   const res = await axios.post(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/save/status`,
+    `${marketBackendUrl}/api/consumer/${userId}/course/save/status`,
     { courseId: courseId }
   );
   return res.data.saved;

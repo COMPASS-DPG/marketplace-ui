@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 
@@ -20,27 +21,27 @@ type marketplaceActionTypes = {
 
 export const getSavedCourse = async (userId: string) => {
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
+    `${marketBackendUrl}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
 export const getOngoingCourses = async (userId: string) => {
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/ongoing`
+    `${marketBackendUrl}/api/consumer/${userId}/course/ongoing`
   );
   return data.data.data.consumerCourses;
 };
 export const getMostPopularCourses = async (userId: string) => {
   // api is not correct for now
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
+    `${marketBackendUrl}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
 export const getRecommendedCourses = async (userId: string) => {
   // api is not correct for now
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/saved`
+    `${marketBackendUrl}/api/consumer/${userId}/course/saved`
   );
   return data.data.data.consumerCourses;
 };
