@@ -34,16 +34,21 @@ export const getSearchCourses =
           payload: response?.data?.data?.searchResponse?.courses,
         });
       }
-
       if (response?.data?.data?.searchResponse?.messageId) {
-        for (let i = 0; i < 5; i++) {
+        let counter = 0;
+
+        const intervalId = setInterval(async () => {
           const res = await axios.get(
             `https://2dbf-2409-40c4-fa-9e8a-819b-9379-f26f-afde.ngrok-free.app/courses/poll/${response?.data?.data?.searchResponse?.messageId}`
           );
 
           dispatch({ type: SEARCH_COURSES_SUCCESS, payload: res.data });
-          await new Promise((resolve) => setTimeout(resolve, 5000)); // 5-second interval
-        }
+
+          counter++;
+          if (counter >= 5) {
+            clearInterval(intervalId); // Stop the interval after 5 iterations
+          }
+        }, 5000); // 5-second interval
       }
     } catch (error) {
       dispatch({ type: SEARCH_COURSES_FAILURE });
