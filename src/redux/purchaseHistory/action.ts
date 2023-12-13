@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 
@@ -19,14 +20,14 @@ type PurchaseActionTypes = {
 
 export const fetchCredits = async (userId: string) => {
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/wallet/credits`
+    `${marketBackendUrl}/api/consumer/${userId}/wallet/credits`
   );
   return data.data.data.credits;
 };
 
 export const fetchPurchaseHistory = async (userId: string) => {
   const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/course/purchases`
+    `${marketBackendUrl}/api/consumer/${userId}/course/purchases`
   );
   return data.data.data.consumerCourses;
 };

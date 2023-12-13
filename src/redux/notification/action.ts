@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 
@@ -18,9 +19,7 @@ export const getAllNotifications =
   (userId: string) => (dispatch: Dispatch<NotificationActionTypes>) => {
     dispatch({ type: GET_NOTIFICATION_REQUEST });
     axios
-      .get(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/${userId}/notifications`
-      )
+      .get(`${marketBackendUrl}/api/consumer/${userId}/notifications`)
       .then((res) =>
         dispatch({
           type: GET_NOTIFICATION_SUCCESS,

@@ -1,3 +1,4 @@
+import { marketBackendUrl } from '@root/config';
 import axios from 'axios';
 import { Dispatch } from 'react';
 
@@ -25,7 +26,7 @@ export const getSearchCourses =
     });
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_MARKETPLACE_BACKEND_URL}/api/consumer/course/search?searchInput=${searchText}`
+        `${marketBackendUrl}/api/consumer/course/search?searchInput=${searchText}`
       );
       {
         dispatch({
