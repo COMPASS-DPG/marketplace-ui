@@ -9,8 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import ConnectionCheckWrapper from '@/components/ErrorScreen/ConnectionCheckWrapper';
 
-import ContextWrapper from '@/app/context/ContextWrapper';
 import { siteConfig } from '@/constant/config';
+import ReduxProvider from '@/redux/Provider';
 
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
@@ -62,7 +62,7 @@ export default function RootLayout({
     <html>
       <body>
         <ConnectionCheckWrapper>
-          <ContextWrapper>
+          <ReduxProvider>
             <>
               {children}
               <ToastContainer
@@ -79,7 +79,7 @@ export default function RootLayout({
                 className='w-[300px]'
               />
             </>
-          </ContextWrapper>
+          </ReduxProvider>
         </ConnectionCheckWrapper>
       </body>
     </html>

@@ -2,35 +2,49 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 
-import { completeCourseType } from '@/app/completed-course/page';
-
-import CourseImage from '~/images/courseImage.png';
+import {
+  CompletedCourseType,
+  giveFeedbackRating,
+} from '@/redux/completedCourse/action';
+import { AppDispatch } from '@/redux/store';
 
 const SingleCompletedCourse = ({
   courseDetail,
 }: {
-  courseDetail: completeCourseType;
+  courseDetail: CompletedCourseType;
 }) => {
-  const [start, setStar] = useState(courseDetail?.start);
-
+  const [start, setStar] = useState(parseInt(courseDetail?.rating ?? 0));
+  const dispatch: AppDispatch = useDispatch();
   const handleClick = (index: number) => {
+    const payload = {
+      courseInfoId: courseDetail.courseInfoId,
+      rating: index,
+    };
+    dispatch(giveFeedbackRating(courseDetail.consumerId, payload));
     setStar(index);
   };
   return (
     <div className='flex gap-3 rounded-2xl p-3 shadow-lg'>
-      <Image src={CourseImage} alt='course image' width='86' />
+      <Image
+        src={courseDetail?.CourseInfo.imageLink}
+        alt='course image'
+        className='rounded-xl'
+        width={100}
+        height={100}
+      />
       <div className='flex flex-col'>
         <div>
           <p className='text-[16px] font-semibold leading-7 text-[#092724]'>
-            {courseDetail?.name}
+            {courseDetail?.CourseInfo?.title}
           </p>
           <p className='text-[12px] leading-4 text-[#697B7A]'>
-            {courseDetail?.author}
+            {courseDetail?.CourseInfo?.author}
           </p>
         </div>
         <div className='flex flex-grow items-center gap-3'>
-          {Array.from({ length: start }).map((_, index) => (
+          {Array.from({ length: start })?.map((_, index) => (
             <FaStar
               key={index}
               size='20'

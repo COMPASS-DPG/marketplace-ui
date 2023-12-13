@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -5,9 +6,13 @@ import 'swiper/css/pagination';
 
 import SwipeSlide from '@/components/SwipeSlide';
 
-import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
+import { OnGoingCoursesType } from '@/app/ongoing-courses/page';
+import { RootState } from '@/redux/store';
+
 const SwiperDiv = () => {
-  const { ongoingCourses } = useMarketPlaceContext();
+  const { ongoingCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
   return (
     <div>
       <Swiper
@@ -16,8 +21,8 @@ const SwiperDiv = () => {
         pagination={true}
         slidesPerView={1}
       >
-        {ongoingCourses?.map((course, index) => (
-          <SwiperSlide key={index}>
+        {ongoingCourses?.map((course: OnGoingCoursesType) => (
+          <SwiperSlide key={course?.courseId}>
             <SwipeSlide course={course} />
           </SwiperSlide>
         ))}

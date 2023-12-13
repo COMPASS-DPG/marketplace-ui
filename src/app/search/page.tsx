@@ -1,34 +1,234 @@
 'use client';
 import { useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import CourseBox from '@/components/Course/CourseBox';
-import RelatedCourseCard from '@/components/Course/RelatedCourseCard';
+import CourseCard from '@/components/Course/CourseCard';
 import FilterPage from '@/components/FilterPage';
 import Heading from '@/components/heading/Heading';
 import SearchInput from '@/components/Input/SearchInput';
 import SearchTopbar from '@/components/navbar/SearchTopbar';
 
-import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
-import { SingleCourseType } from '@/app/course-description/[id]/page';
-import { getFilterCourse } from '@/services/marketplaceServices';
+import { CourseType } from '@/redux/marketplace/marketplaceReducer';
+import { getSearchCourses } from '@/redux/searchCourses/action';
+import { AppDispatch, RootState } from '@/redux/store';
 
 import { NotFound } from '~/svg';
 
+// const testData = [
+//   {
+//     courseId: "1",
+//     title: "NestJS Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "Udemy",
+//     credits: "10",
+//     language: [
+//       "en"
+//     ],
+//     competency: {
+//       Typescript: [
+//         "Level1"
+//       ],
+//       APIDevelopment: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       BackendEngineering: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "2",
+//     title: "JAVA Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "Code",
+//     credits: "4",
+//     language: [
+//       "marathi"
+//     ],
+//     competency: {
+//       competency1: [
+//         "Level1"
+//       ],
+//       competency2: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency3: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "3",
+//     title: "C++ Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "my code",
+//     credits: "8",
+//     language: [
+//       "hindi"
+//     ],
+//     competency: {
+//       competency4: [
+//         "Level1"
+//       ],
+//       competency5: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency6: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "5",
+//     title: "Mongodb Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "my code",
+//     credits: "4",
+//     language: [
+//       "hindi"
+//     ],
+//     competency: {
+//       competency4: [
+//         "Level1"
+//       ],
+//       competency5: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency6: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "5",
+//     title: "Python Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "my code",
+//     credits: "1",
+//     language: [
+//       "hindi"
+//     ],
+//     competency: {
+//       competency1: [
+//         "Level1"
+//       ],
+//       competency3: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency6: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "6",
+//     title: "Next Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "my code",
+//     credits: "2",
+//     language: [
+//       "hindi"
+//     ],
+//     competency: {
+//       competency2: [
+//         "Level1"
+//       ],
+//       competency1: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency6: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   },
+//   {
+//     courseId: "7",
+//     title: "C Complete",
+//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
+//     providerId: "123e4567-e89b-42d3-a456-556642440011",
+//     providerName: "my code",
+//     credits: "4",
+//     language: [
+//       "hindi"
+//     ],
+//     competency: {
+//       competency3: [
+//         "Level1"
+//       ],
+//       competency5: [
+//         "Level1",
+//         "Level2"
+//       ],
+//       competency6: [
+//         "Level1"
+//       ]
+//     },
+//     imageLink: "https://courses.nestjs.com/img/logo.svg",
+//     avgRating: "0",
+//     startTime: "2023-12-05T06:25:41.270Z",
+//     endTime: "2023-12-05T06:25:41.270Z",
+//     numberOfPurchases: 1
+//   }
+// ]
+
 const getInitialValue2 = () => {
   return {
-    competencies: [],
-    courseProviders: [],
-    language: [],
+    competencies: '',
+    courseProviders: null,
+    language: null,
     sortBy: '',
   };
 };
 
 export type filterObjType = {
-  competencies: string[];
-  courseProviders: string[];
-  language: string[];
+  competencies: string;
+  courseProviders: string[] | null;
+  language: string[] | null;
   sortBy: string;
 };
 
@@ -38,77 +238,150 @@ export type optionType = {
   courseProvider: { label: string; value: string }[];
 };
 
-const initialFilterOption: optionType = {
-  competency: [],
-  language: [],
-  courseProvider: [],
+// will filter data
+const filterData = (data: CourseType[], filterObj: filterObjType) => {
+  // if there is no filter applied
+  if (
+    Object.values(filterObj)?.every(
+      (element) => element === null || element === ''
+    )
+  ) {
+    return data;
+  }
+  const { competencies, courseProviders, language, sortBy } = filterObj;
+
+  let filteredResponse = data?.filter((course: CourseType) => {
+    const competencyMatch =
+      !competencies || course?.competency[competencies]?.length > 0;
+
+    const languageMatch =
+      language?.length === 0 ||
+      !language ||
+      language?.some((lang: string) => course?.language.includes(lang));
+
+    const courseProviderMatch =
+      courseProviders?.length === 0 ||
+      !courseProviders ||
+      courseProviders?.some(
+        (provider: string) => course?.providerName === provider
+      );
+
+    return competencyMatch && languageMatch && courseProviderMatch;
+  });
+  if (sortBy === 'Low Price') {
+    filteredResponse = filteredResponse.sort((a, b) => a.credits - b.credits);
+  }
+  if (sortBy === 'High Price') {
+    filteredResponse = filteredResponse.sort((a, b) => b.credits - a.credits);
+  }
+  return filteredResponse;
 };
+
 const SearchPage = () => {
-  const { mostPopularCourses } = useMarketPlaceContext();
-  const [input, setInput] = useState<string>('');
+  // will set text to search courses
+  const [searchText, setSearchText] = useState<string>('');
+
+  // will set data to filter courses
+  const [filterObj, setFilterObj] = useState<filterObjType>(getInitialValue2());
+
+  // to dispatch action for api call
+  const dispatch: AppDispatch = useDispatch();
+
+  // will get most popular course data
+  const { mostPopularCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
+
+  // will get searched courses data
+  const { searchCourses } = useSelector(
+    (state: RootState) => state?.searchCourses
+  );
+
+  // this method will apply filter to fetched data
+  const coursesList = filterData(searchCourses, filterObj);
+
+  // will show popular courses initial when true
   const [showMostPopularCourses, setShowMostPopularCourses] =
     useState<boolean>(true);
 
-  const [filterCourse, setFilterCourse] = useState<SingleCourseType[]>([]);
-  const [filterObj, setFilterObj] = useState<filterObjType>(getInitialValue2());
-
+  // will show filter input fields if true
   const [isFilterOpen, setFilterOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string[]>([]);
-  const [filterOption, setFilterOption] =
-    useState<optionType>(initialFilterOption);
 
-  // handle filter button
+  // will show filters list in ui
+  const [selectedOption, setSelectedOption] = useState<string[]>([]);
+
+  // will set all filters applied eg '1 language' '2 course provider' etc
   const SearchFilterOptions = () => {
     const { competencies, courseProviders, language, sortBy } = filterObj;
     setSelectedOption([]);
-    if (competencies.length)
+    if (competencies) setSelectedOption((prev) => [...prev, competencies]);
+    if (courseProviders?.length)
       setSelectedOption((prev) => [
         ...prev,
-        `${competencies.length} competencies`,
+        `${courseProviders?.length} course provider`,
       ]);
-    if (courseProviders.length)
-      setSelectedOption((prev) => [
-        ...prev,
-        `${courseProviders.length} course provider`,
-      ]);
-    if (language.length)
+    if (language?.length)
       setSelectedOption((prev) => [...prev, `${language.length} language`]);
     if (sortBy) {
       setSelectedOption((prev) => [...prev, sortBy]);
     }
   };
 
-  // open filter page
-  const handleFiterButton = async () => {
-    try {
-      const response = await getFilterCourse(input);
-      const filteredResponse = response.filter((course: SingleCourseType) => {
-        const { competencies, courseProviders, language } = filterObj;
-
-        const competencyMatch =
-          competencies.length === 0 ||
-          competencies.some(
-            (competency) => course.competency[competency]?.length > 0
-          );
-
-        const languageMatch =
-          language.length === 0 ||
-          language.some((lang) => course.language.includes(lang));
-
-        const courseProviderMatch =
-          courseProviders.length === 0 ||
-          courseProviders.some((provider) => course.providerName === provider);
-
-        return competencyMatch && languageMatch && courseProviderMatch;
-      });
-
-      setFilterCourse(filteredResponse);
+  // will fetch data and hide popular courses
+  const handleSearchCourse = async () => {
+    if (searchText) {
+      dispatch(getSearchCourses(searchText));
       setShowMostPopularCourses(false);
-    } catch (error) {
-      toast.error('something went wrong in filter');
+    } else {
+      toast.error('please enter course name', {
+        draggable: false,
+      });
     }
   };
 
+  // will remove search field
+  const handleCrossIcon = () => {
+    setShowMostPopularCourses(true);
+    setSearchText('');
+  };
+
+  // will remove filters and set the filters to null
+  const handleDeleteSelectedOption = (indexToRemove: number) => {
+    const updatedOptions = [...selectedOption];
+    const removeFilter = updatedOptions.splice(indexToRemove, 1);
+    if (removeFilter?.join()?.includes('High Price' || 'Low Price')) {
+      setFilterObj((pre) => {
+        return {
+          ...pre,
+          sortBy: '',
+        };
+      });
+    } else if (removeFilter?.join()?.includes('language')) {
+      setFilterObj((pre) => {
+        return {
+          ...pre,
+          language: null,
+        };
+      });
+    } else if (removeFilter?.join()?.includes('provider')) {
+      setFilterObj((pre) => {
+        return {
+          ...pre,
+          courseProviders: null,
+        };
+      });
+    } else {
+      setFilterObj((pre) => {
+        return {
+          ...pre,
+          competencies: '',
+        };
+      });
+    }
+    setSelectedOption(updatedOptions);
+  };
+
+  // filter input fields
   if (isFilterOpen) {
     return (
       <FilterPage
@@ -116,71 +389,27 @@ const SearchPage = () => {
         setFilterObj={setFilterObj}
         setFilterOpen={setFilterOpen}
         SearchFilterOptions={SearchFilterOptions}
-        filterOption={filterOption}
-        handleFiterButton={handleFiterButton}
+        handleFilterCourse={handleSearchCourse}
       />
     );
   }
-  const handleCrossIcon = () => {
-    setShowMostPopularCourses(true);
-    setInput('');
-  };
-  const handleFilterIcon = () => {
-    // Extract distinct values for competencies, language, and courseProviders
-    const allCompetencies = Array.from(
-      new Set(filterCourse.flatMap((course) => Object.keys(course.competency)))
-    );
-
-    const allLanguages = Array.from(
-      new Set(filterCourse.flatMap((course) => course.language))
-    );
-
-    const allCourseProviders = Array.from(
-      new Set(filterCourse.map((course) => course.providerName))
-    );
-
-    // Create the new filterOption object
-    const newFilterOption: optionType = {
-      competency: allCompetencies.map((competency) => ({
-        label: competency,
-        value: competency,
-      })),
-      language: allLanguages.map((language) => ({
-        label: language,
-        value: language,
-      })),
-      courseProvider: allCourseProviders.map((provider) => ({
-        label: provider,
-        value: provider,
-      })),
-    };
-
-    setFilterOption(newFilterOption);
-    setFilterOpen(true);
-  };
-
-  const handleCross = (indexToRemove: number) => {
-    const updatedOptions = [...selectedOption];
-    updatedOptions.splice(indexToRemove, 1);
-    setSelectedOption(updatedOptions);
-  };
 
   return (
-    <div className='ml-[16px]'>
+    <div className='mx-[16px] mb-[30px]'>
       <SearchTopbar title='Search' redirectTo='/marketplace' />
       <SearchInput
-        value={input}
-        onChange={setInput}
+        value={searchText}
+        onChange={setSearchText}
         placeholder='Search your course...'
-        handleClick={handleFiterButton}
+        handleClick={handleSearchCourse}
         selectedOptionCount={selectedOption.length}
         handleCrossIcon={handleCrossIcon}
-        handleFilterIcon={handleFilterIcon}
+        handleFilterIcon={() => setFilterOpen(true)}
       />
-      {selectedOption.length != 0 && (
+      {selectedOption?.length != 0 && (
         <div className='my-5 flex flex-wrap items-center gap-2'>
           <p className='text-[14px] font-medium leading-6 '>Filtered by:</p>
-          {selectedOption.map((option, index) => {
+          {selectedOption?.map((option, index) => {
             return (
               <div
                 key={index}
@@ -189,7 +418,7 @@ const SearchPage = () => {
                 <p>{option}</p>
                 <RxCross1
                   size='12'
-                  onClick={() => handleCross(index)}
+                  onClick={() => handleDeleteSelectedOption(index)}
                   style={{ cursor: 'pointer' }}
                 />
               </div>
@@ -205,14 +434,14 @@ const SearchPage = () => {
           CoursesList={mostPopularCourses}
           handleSeeAllButtonClick='/all-courses?type=popular'
         />
-      ) : filterCourse.length != 0 ? (
+      ) : coursesList?.length != 0 ? (
         <div>
           <div className='mt-5  px-5 py-4'>
             <Heading heading='Related Results' />
           </div>
           <div className='flex flex-col gap-5 px-4'>
-            {filterCourse.map((course: SingleCourseType, index: number) => {
-              return <RelatedCourseCard key={index} courseDetails={course} />;
+            {coursesList?.map((course: CourseType, index: number) => {
+              return <CourseCard key={index} courseDetails={course} />;
             })}
           </div>
         </div>

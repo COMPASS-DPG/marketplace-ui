@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 import 'swiper/css';
 
 import CourseBox from '@/components/Course/CourseBox';
@@ -9,14 +10,15 @@ import SeeAll from '@/components/heading/SeeAll';
 import UnclickableSearchInput from '@/components/Input/UnclickableSearchInput';
 import SwiperDiv from '@/components/SwiperDiv';
 
-import { useMarketPlaceContext } from '@/app/context/MarketPlaceUserContext';
+import { RootState } from '@/redux/store';
 
 const MarketPlace = () => {
-  const { savedCourses, mostPopularCourses, recommendedCourses } =
-    useMarketPlaceContext();
+  const { savedCourses, mostPopularCourses, recommendedCourses } = useSelector(
+    (state: RootState) => state?.marketplace
+  );
 
   return (
-    <div>
+    <div className='pb-4'>
       <div className='px-5 pt-4 '>
         <Heading heading='Hi Akshay Anand 👋' />
         <p

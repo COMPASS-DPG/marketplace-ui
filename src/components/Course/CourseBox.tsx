@@ -2,7 +2,7 @@ import CourseSlides from '@/components/Course/CourseSlides';
 import Heading from '@/components/heading/Heading';
 import SeeAll from '@/components/heading/SeeAll';
 
-import { CourseType } from '@/app/context/MarketPlaceUserContext';
+import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 
 const CourseBox = ({
   heading,
@@ -19,9 +19,7 @@ const CourseBox = ({
         <Heading heading={heading} />
         <SeeAll heading='See all' redirectTo={handleSeeAllButtonClick} />
       </div>
-      <div className='flex  gap-2 px-4'>
-        <CourseSlides CoursesList={CoursesList} />
-      </div>
+      <CourseSlides CoursesList={CoursesList} />
     </div>
   );
 };
