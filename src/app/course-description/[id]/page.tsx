@@ -56,7 +56,6 @@ const CourseDescription = () => {
   const userId = localStorage.getItem('userId') ?? '';
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
-  // const { id } = useParams();
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const [DetailsPopUp, setDetailsPopUp] = useState<boolean>(false);
   const [option, setOption] = useState('overview');
