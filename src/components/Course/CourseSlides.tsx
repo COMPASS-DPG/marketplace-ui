@@ -9,6 +9,7 @@ import NoCoursesFound from './NoCoursesFound';
 
 const CourseSlides = ({ CoursesList }: { CoursesList: CourseType[] }) => {
   const spaceBetween = CoursesList?.length > 1 ? -10 : 0;
+
   return (
     <>
       {CoursesList?.length > 0 ? (
