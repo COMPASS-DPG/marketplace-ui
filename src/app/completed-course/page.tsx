@@ -13,7 +13,6 @@ import { AppDispatch, RootState } from '@/redux/store';
 
 const CompletedCourse = () => {
   const dispatch: AppDispatch = useDispatch();
-  const userId = localStorage.getItem('userId') || '';
   const { courses } = useSelector((state: RootState) => state?.completedCourse);
 
   const courseList = (courses ?? []).filter(
@@ -21,8 +20,9 @@ const CompletedCourse = () => {
   );
 
   useEffect(() => {
+    const userId = localStorage.getItem('userId') || '';
     dispatch(getCompletedCourse(userId));
-  }, [dispatch, userId]);
+  }, [dispatch]);
   return (
     <div className={`px-5 pb-5 ${outfit.className} flex flex-col gap-2`}>
       {courseList?.map((course: CompletedCourseType, index: number) => (

@@ -17,7 +17,6 @@ export type NotificationType = {
 };
 
 const Notifications = () => {
-  const userId = localStorage.getItem('userId') ?? '';
   const dispatch: AppDispatch = useDispatch();
   const {
     notificationData,
@@ -37,8 +36,9 @@ const Notifications = () => {
   );
 
   useEffect(() => {
+    const userId = localStorage.getItem('userId') ?? '';
     dispatch(getAllNotifications(userId));
-  }, [dispatch, userId]);
+  }, [dispatch]);
 
   return (
     <div className={`${outfit.className}`}>

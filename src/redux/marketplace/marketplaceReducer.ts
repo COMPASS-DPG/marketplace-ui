@@ -16,10 +16,12 @@ export type CourseType = {
   credits: number;
   language: string[];
   imageLink: string;
+  imgLink: string;
   description: string;
   author?: string;
   courseLink?: string;
   bppId?: string;
+  bppUri?: string;
   providerId?: string;
   providerName?: string;
   numberOfPurchases: number;

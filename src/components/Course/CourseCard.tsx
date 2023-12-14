@@ -15,12 +15,12 @@ import ColoredText from '../heading/ColoredText';
 import { EditIcon, Star } from '~/svg';
 
 const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
-  const userId = localStorage.getItem('userId') ?? '';
   const router = useRouter();
 
   const dispatch: AppDispatch = useDispatch();
 
   const handleRoute = () => {
+    const userId = localStorage.getItem('userId') ?? '';
     dispatch(
       getSaveCourseAndStatus(userId, courseDetails?.courseId, courseDetails)
     ).then((res: unknown) => {
@@ -38,11 +38,15 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
         className={`rounded-2xl border bg-white p-1 shadow hover:bg-slate-100 ${outfit.className}`}
       >
         <div className='flex p-2'>
-          <div className='h-[100px] w-[100px] overflow-hidden rounded-xl'>
+          <div className='h-[80px] w-[100px] overflow-hidden rounded-xl'>
             <Image
-              src={courseDetails?.imageLink}
+              src={
+                courseDetails?.imageLink
+                  ? courseDetails?.imageLink
+                  : courseDetails?.imgLink
+              }
               width={100}
-              height={100}
+              height={80}
               alt='courseImage'
               className='h-[100%] w-[100%] rounded-xl object-cover'
             />
@@ -105,10 +109,14 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
             Cr. {courseDetails?.credits}
           </p>
           <p className='flex items-center text-[12px] font-bold text-[#787878]'>
-            {courseDetails?.avgRating || '-'}
-            <span className='pl-0.5'>
-              <Star width='12px' />
-            </span>
+            {courseDetails?.avgRating && (
+              <>
+                {courseDetails?.avgRating}{' '}
+                <span className='pl-0.5'>
+                  <Star width='12px' />{' '}
+                </span>
+              </>
+            )}
           </p>
         </div>
       </div>

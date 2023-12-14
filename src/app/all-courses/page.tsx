@@ -14,7 +14,6 @@ import { CourseType } from '@/redux/marketplace/marketplaceReducer';
 import { AppDispatch, RootState } from '@/redux/store';
 
 const Courses = () => {
-  const userId = localStorage.getItem('userId') ?? '';
   const dispatch: AppDispatch = useDispatch();
   const {
     isLoading,
@@ -29,6 +28,7 @@ const Courses = () => {
   const [currentTitle, setCurrentTitle] = useState('');
 
   useEffect(() => {
+    const userId = localStorage.getItem('userId') ?? '';
     const type = useParam.get('type');
     if (!savedCourses || !mostPopularCourses || !recommendedCourses) {
       dispatch(getMarketplaceCourses(userId));
@@ -49,7 +49,6 @@ const Courses = () => {
     mostPopularCourses,
     savedCourses,
     useParam,
-    userId,
   ]);
 
   return (

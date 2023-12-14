@@ -38,12 +38,12 @@ export const getMostPopularCourses = async () => {
   );
   return data.data.data.response;
 };
-export const getRecommendedCourses = async () => {
+export const getRecommendedCourses = async (userId: string) => {
   // api is not correct for now
   const data = await axios.get(
-    `${marketBackendUrl}/api/consumer/course/recommended`
+    `${marketBackendUrl}/api/consumer/${userId}/course/recommended`
   );
-  return data.data.data.consumerCourses;
+  return data.data.data.response;
 };
 
 export const getMarketplaceCourses = (userId: string) => {
@@ -52,22 +52,21 @@ export const getMarketplaceCourses = (userId: string) => {
 
     try {
       const [
-        // recommendedCoursesResponse,
+        recommendedCoursesResponse,
         mostPopularCoursesResponse,
         ongoingCoursesResponse,
         savedCourseResponse,
       ] = await Promise.all([
-        // getRecommendedCourses(),
+        getRecommendedCourses(userId),
         getMostPopularCourses(),
         getOngoingCourses(userId),
         getSavedCourse(userId),
       ]);
-
       return dispatch({
         type: MARKETPLACE_SUCCESS,
         payload: {
           mostPopularCourses: mostPopularCoursesResponse,
-          recommendedCourses: [],
+          recommendedCourses: recommendedCoursesResponse,
           savedCourses: savedCourseResponse,
           ongoingCourses: ongoingCoursesResponse,
         },

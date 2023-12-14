@@ -69,7 +69,9 @@ const CourseDescription = () => {
       title: singleCourse?.title,
       description: singleCourse?.description,
       credits: singleCourse?.credits,
-      imageLink: singleCourse?.imageLink,
+      imageLink: singleCourse?.imageLink
+        ? singleCourse?.imageLink
+        : singleCourse?.imgLink,
       language: singleCourse?.language,
       courseLink: singleCourse?.courseLink,
       providerName: singleCourse?.providerName,
@@ -77,6 +79,8 @@ const CourseDescription = () => {
       competency: singleCourse?.competency,
       providerId: singleCourse?.providerId,
       author: singleCourse?.author,
+      bppId: singleCourse?.bppId,
+      bppUri: singleCourse?.bppUri,
     };
 
     dispatch(purchasesACourse(userId, payload)).then((res: unknown) => {
@@ -129,6 +133,8 @@ const CourseDescription = () => {
         author: singleCourse?.author,
         avgRating: singleCourse?.avgRating,
         competency: singleCourse?.competency,
+        bppId: singleCourse?.bppId,
+        bppUri: singleCourse?.bppUri,
       };
 
       dispatch(saveACourse(userId, payload)).then((res: unknown) => {
@@ -191,7 +197,11 @@ const CourseDescription = () => {
       <div className='px-5 py-2'>
         <Image
           className='rounded-xl'
-          src={singleCourse?.imageLink}
+          src={
+            singleCourse?.imageLink
+              ? singleCourse?.imageLink
+              : singleCourse?.imgLink
+          }
           alt='course-description-image'
           width={350}
           height={250}
@@ -238,7 +248,14 @@ const CourseDescription = () => {
       {/* member tab */}
       <div className='flex items-center gap-1 px-5 text-[16px] text-[#65758C]'>
         <GoPeople />
-        <p>{singleCourse?.numberOfPurchases} Members</p>
+        <p>
+          {singleCourse?.numberOfPurchases
+            ? singleCourse?.numberOfPurchases
+            : singleCourse?.numOfUsers
+            ? singleCourse?.numOfUsers
+            : 0}{' '}
+          Members
+        </p>
       </div>
       <hr className='mb-5 mt-4 h-[1px] text-[#F4F4F4]' />
       {/* Overview and competency */}
