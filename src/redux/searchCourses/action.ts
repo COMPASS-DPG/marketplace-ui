@@ -36,14 +36,16 @@ export const getSearchCourses =
       }
       if (response?.data?.data?.searchResponse?.messageId) {
         let counter = 0;
-
         const intervalId = setInterval(async () => {
           const res = await axios.get(
-            `https://2dbf-2409-40c4-fa-9e8a-819b-9379-f26f-afde.ngrok-free.app/courses/poll/${response?.data?.data?.searchResponse?.messageId}`
+            `${marketBackendUrl}/api/consumer/course/search/poll/${response?.data?.data?.searchResponse?.messageId}`
           );
-
-          dispatch({ type: SEARCH_COURSES_SUCCESS, payload: res.data });
-
+          if (Array.isArray(res.data.data.courses.data)) {
+            dispatch({
+              type: SEARCH_COURSES_SUCCESS,
+              payload: res.data.data.courses.data,
+            });
+          }
           counter++;
           if (counter >= 5) {
             clearInterval(intervalId); // Stop the interval after 5 iterations

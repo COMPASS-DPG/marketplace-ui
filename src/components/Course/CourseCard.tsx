@@ -38,13 +38,15 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
         className={`rounded-2xl border bg-white p-1 shadow hover:bg-slate-100 ${outfit.className}`}
       >
         <div className='flex p-2'>
-          <Image
-            src={courseDetails?.imageLink}
-            alt='courseImage'
-            width={100}
-            height={100}
-            className='rounded-xl'
-          />
+          <div className='h-[100px] w-[100px] overflow-hidden rounded-xl'>
+            <Image
+              src={courseDetails?.imageLink}
+              width={100}
+              height={100}
+              alt='courseImage'
+              className='h-[100%] w-[100%] rounded-xl object-cover'
+            />
+          </div>
           <div className='pl-2'>
             <p
               className={`w-[211px] ${outfit.className} text-[15px] font-bold text-zinc-800`}
