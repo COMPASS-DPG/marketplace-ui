@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import ConnectionCheckWrapper from '@/components/ErrorScreen/ConnectionCheckWrapper';
 
-import { siteConfig } from '@/constant/config';
 import ReduxProvider from '@/redux/Provider';
 
 // !STARTERCONF Change these default meta
@@ -27,23 +26,23 @@ export const metadata: Metadata = {
     shortcut: '/favicon/samagra_logo.jpg',
     apple: '/favicon/samagra_logo.jpg',
   },
-  manifest: `/favicon/site.webmanifest`,
-  openGraph: {
-    url: siteConfig.url,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    siteName: siteConfig.title,
-    images: [`${siteConfig.url}/images/og.jpg`],
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [`${siteConfig.url}/images/og.jpg`],
-    // creator: '@th_clarence',
-  },
+  // manifest: `/favicon/site.webmanifest`,
+  // openGraph: {
+  //   url: siteConfig.url,
+  //   title: siteConfig.title,
+  //   description: siteConfig.description,
+  //   siteName: siteConfig.title,
+  //   images: [`${siteConfig.url}/images/og.jpg`],
+  //   type: 'website',
+  //   locale: 'en_US',
+  // },
+  // twitter: {
+  //   card: 'summary_large_image',
+  //   title: siteConfig.title,
+  //   description: siteConfig.description,
+  //   images: [`${siteConfig.url}/images/og.jpg`],
+  //   // creator: '@th_clarence',
+  // },
   // authors: [
   //   {
   //     name: 'Theodorus Clarence',
