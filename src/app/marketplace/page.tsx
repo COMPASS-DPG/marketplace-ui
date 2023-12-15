@@ -16,11 +16,12 @@ const MarketPlace = () => {
   const { savedCourses, mostPopularCourses, recommendedCourses } = useSelector(
     (state: RootState) => state?.marketplace
   );
+  const { userDetails } = useSelector((state: RootState) => state?.userDetails);
 
   return (
     <div className='pb-4'>
       <div className='px-5 pt-4 '>
-        <Heading heading='Hi Akshay Anand 👋' />
+        <Heading heading={`Hi ${userDetails?.name} 👋`} />
         <p
           className={`mb-1 text-base font-normal text-[#272728]	 ${outfit.className}`}
         >

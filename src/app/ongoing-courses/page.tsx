@@ -2,6 +2,7 @@
 import { useSelector } from 'react-redux';
 import 'swiper/css';
 
+import NoCoursesFound from '@/components/Course/NoCoursesFound';
 import SwipeSlide from '@/components/SwipeSlide';
 
 import { RootState } from '@/redux/store';
@@ -42,11 +43,17 @@ const OnGoingCourses = () => {
 
   return (
     <div className='px-5'>
-      {ongoingCourses?.map((course: OnGoingCoursesType) => (
-        <div key={course?.courseId}>
-          <SwipeSlide course={course} />
+      {ongoingCourses && ongoingCourses?.length > 0 ? (
+        ongoingCourses?.map((course: OnGoingCoursesType) => (
+          <div key={course?.courseId}>
+            <SwipeSlide course={course} />
+          </div>
+        ))
+      ) : (
+        <div className='mt-[100px]'>
+          <NoCoursesFound />
         </div>
-      ))}
+      )}
     </div>
   );
 };

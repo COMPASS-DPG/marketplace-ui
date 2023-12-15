@@ -15,18 +15,17 @@ import ReduxProvider from '@/redux/Provider';
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.title}`,
-  },
-  description: siteConfig.description,
+  title: 'Compass Marketplace demo',
+
+  description:
+    'Marketplace portal to upskill themselves according to their competency.',
   robots: { index: true, follow: true },
   // !STARTERCONF this is the default favicon, you can generate your own from https://realfavicongenerator.net/
   // ! copy to /favicon folder
   icons: {
-    icon: '/favicon/favicon.ico',
-    shortcut: '/favicon/favicon-16x16.png',
-    apple: '/favicon/apple-touch-icon.png',
+    icon: '/favicon/samagra_logo.jpg',
+    shortcut: '/favicon/samagra_logo.jpg',
+    apple: '/favicon/samagra_logo.jpg',
   },
   manifest: `/favicon/site.webmanifest`,
   openGraph: {

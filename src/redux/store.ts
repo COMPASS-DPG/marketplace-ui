@@ -17,6 +17,7 @@ import { marketplaceReducer } from './marketplace/marketplaceReducer';
 import { notificationReducer } from './notification/notificationReducer';
 import { purchaseHistoryReducer } from './purchaseHistory/purchaseHistoryReducer';
 import { searchCoursesReducer } from './searchCourses/searchReducer';
+import { userDetailsReducer } from './userDetails/userDetailsReducer';
 
 const createNoopStorage = () => {
   return {
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   singleCourse: courseDescriptionReducer,
   searchCourses: searchCoursesReducer,
   completedCourse: completedCourseReducer,
+  userDetails: userDetailsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

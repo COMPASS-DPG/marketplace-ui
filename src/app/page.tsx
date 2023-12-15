@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { getMarketplaceCourses } from '@/redux/marketplace/action';
 import { MARKETPLACE_SUCCESS } from '@/redux/marketplace/type';
 import { AppDispatch } from '@/redux/store';
+import { getUserDetails } from '@/redux/userDetails/action';
 
 /**
  * SVGR Support
@@ -33,6 +34,7 @@ export default function HomePage() {
       userId = queryId;
       localStorage.setItem('userId', queryId);
     }
+    dispatch(getUserDetails(userId));
     dispatch(getMarketplaceCourses(userId)).then((res: unknown) => {
       if ((res as { type?: string })?.type === MARKETPLACE_SUCCESS) {
         router.push('/marketplace');
@@ -42,7 +44,16 @@ export default function HomePage() {
   return (
     <main>
       <Head>
-        <title>Hi</title>
+        <title>Compass Marketplace demo</title>
+        <meta
+          name='description'
+          content='This is a custom description for my example page.'
+        />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <link
+          rel='icon'
+          href='https://media.licdn.com/dms/image/C510BAQFjhkWMy7bt4A/company-logo_200_200/0/1631433[…]47483647&v=beta&t=jyeO-x9Izv6irA2_ecnOIgeeKqswSEDmIfvqTMugRGk'
+        />
       </Head>
       <section className='bg-white'>
         <div className='flex h-screen flex-col items-center justify-center'>
