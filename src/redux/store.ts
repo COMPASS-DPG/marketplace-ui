@@ -7,7 +7,7 @@ import {
   Store,
 } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 
 import { completedCourseReducer } from '@/redux/completedCourse/completedCourseReducer';
@@ -17,6 +17,25 @@ import { marketplaceReducer } from './marketplace/marketplaceReducer';
 import { notificationReducer } from './notification/notificationReducer';
 import { purchaseHistoryReducer } from './purchaseHistory/purchaseHistoryReducer';
 import { searchCoursesReducer } from './searchCourses/searchReducer';
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key: string) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: string, value: string) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: string) {
+      return Promise.resolve();
+    },
+  };
+};
+
+const storage =
+  typeof window !== 'undefined'
+    ? createWebStorage('local')
+    : createNoopStorage();
 
 const persistConfig = {
   key: 'marketplacePersistData',
