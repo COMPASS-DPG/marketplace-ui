@@ -238,10 +238,15 @@ const CourseDescription = () => {
             Cr. {singleCourse?.credits}
           </p>
           <p className='flex items-center text-[15px] font-bold text-[#787878]'>
-            {singleCourse?.avgRating ?? '--'}
-            <span className='pl-0.5'>
-              <Star width='12px' />
-            </span>
+            {singleCourse?.avgRating !== null &&
+              singleCourse?.avgRating !== undefined && (
+                <>
+                  {singleCourse?.avgRating}{' '}
+                  <span className='pl-0.5'>
+                    <Star width='12px' />
+                  </span>
+                </>
+              )}
           </p>
         </div>
       </div>

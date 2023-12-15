@@ -109,14 +109,15 @@ const CourseCard = ({ courseDetails }: { courseDetails: CourseType }) => {
             Cr. {courseDetails?.credits}
           </p>
           <p className='flex items-center text-[12px] font-bold text-[#787878]'>
-            {courseDetails?.avgRating && (
-              <>
-                {courseDetails?.avgRating}{' '}
-                <span className='pl-0.5'>
-                  <Star width='12px' />{' '}
-                </span>
-              </>
-            )}
+            {courseDetails?.avgRating !== null &&
+              courseDetails?.avgRating !== undefined && (
+                <>
+                  {courseDetails?.avgRating}{' '}
+                  <span className='pl-0.5'>
+                    <Star width='12px' />{' '}
+                  </span>
+                </>
+              )}
           </p>
         </div>
       </div>
