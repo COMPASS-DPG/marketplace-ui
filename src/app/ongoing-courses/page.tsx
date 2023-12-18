@@ -5,6 +5,7 @@ import 'swiper/css';
 import NoCoursesFound from '@/components/Course/NoCoursesFound';
 import SwipeSlide from '@/components/SwipeSlide';
 
+import { CompetencyType } from '@/redux/marketplace/marketplaceReducer';
 import { RootState } from '@/redux/store';
 
 export type OnGoingCoursesType = {
@@ -28,9 +29,7 @@ export type OnGoingCoursesType = {
     author: string;
     avgRating: number;
     bppUrl: string;
-    competency: {
-      [competency: string]: string[];
-    };
+    competency: CompetencyType[];
     courseId: number;
     numberOfPurchases: number;
   };

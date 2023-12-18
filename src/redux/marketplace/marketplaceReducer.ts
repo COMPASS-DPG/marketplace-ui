@@ -4,12 +4,22 @@ import {
   MARKETPLACE_SUCCESS,
 } from './type';
 
+export type LevelsType = {
+  id: number | string;
+  levelNumber: number | string;
+  name: string;
+};
+
+export type CompetencyType = {
+  id: number | string;
+  name: string;
+  levels: LevelsType[];
+};
+
 export type CourseType = {
   courseId: string;
   title: string;
-  competency: {
-    [key: string]: string[];
-  };
+  competency: CompetencyType[];
   created_by: string;
   lastUpdatedOn: string;
   avgRating: number;

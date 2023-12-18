@@ -4,10 +4,11 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 import { outfit, poppins } from '@/components/FontFamily';
 
+import { LevelsType } from '@/redux/marketplace/marketplaceReducer';
+
 type propType = {
-  key: number;
   name: string;
-  levels: string[];
+  levels: LevelsType[];
 };
 
 const SingleCompetency = ({ competency }: { competency: propType }) => {
@@ -39,10 +40,10 @@ const SingleCompetency = ({ competency }: { competency: propType }) => {
               </p>
             </div>
             <ul className='pl-2'>
-              {levels.map((level, index) => {
+              {levels?.map((level) => {
                 return (
-                  <li key={index} className='flex items-start'>
-                    &bull; {level}
+                  <li key={level?.id} className='flex items-start'>
+                    &bull; {level?.name}
                   </li>
                 );
               })}

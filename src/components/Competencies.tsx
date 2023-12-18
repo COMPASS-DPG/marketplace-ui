@@ -1,17 +1,15 @@
 import SingleCompetency from '@/components/course-description/SingleCompetency';
 
-type CompetencyType = {
-  [key: string]: string[];
-};
+import { CompetencyType } from '@/redux/marketplace/marketplaceReducer';
 
-const Competencies = ({ competency }: { competency: CompetencyType }) => {
+const Competencies = ({ competency }: { competency: CompetencyType[] }) => {
   return (
     <div className='py-4 '>
-      {Object.keys(competency ?? {})?.map((key, index) => {
+      {competency?.map((item) => {
         return (
           <SingleCompetency
-            key={index}
-            competency={{ key: index, name: key, levels: competency[key] }}
+            key={item.id}
+            competency={{ name: item.name, levels: item.levels }}
           />
         );
       })}
