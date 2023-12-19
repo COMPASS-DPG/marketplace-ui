@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  marketplace-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3400:3000"
+    networks:
+      - samagra_compass
+
+networks:
+  samagra_compass:
+    external: true
