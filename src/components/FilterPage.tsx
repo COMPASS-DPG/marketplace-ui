@@ -62,13 +62,6 @@ const FilterCourse = ({
           options={COMPETENCY_OPTIONS}
           placeholder='--Select--'
         />
-
-        {/* <MultiSelectTag
-          onChange={(value) => handleChange('competencies', value)}
-          value={filterObj?.competencies ?? []}
-          options={COMPETENCY_OPTIONS}
-          placeholder='--Select--'
-        /> */}
       </div>
 
       {/*  third party provider*/}

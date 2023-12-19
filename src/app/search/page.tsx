@@ -17,205 +17,6 @@ import { AppDispatch, RootState } from '@/redux/store';
 
 import { NotFound } from '~/svg';
 
-// const testData = [
-//   {
-//     courseId: "1",
-//     title: "NestJS Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "Udemy",
-//     credits: "10",
-//     language: [
-//       "en"
-//     ],
-//     competency: {
-//       Typescript: [
-//         "Level1"
-//       ],
-//       APIDevelopment: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       BackendEngineering: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "2",
-//     title: "JAVA Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "Code",
-//     credits: "4",
-//     language: [
-//       "marathi"
-//     ],
-//     competency: {
-//       competency1: [
-//         "Level1"
-//       ],
-//       competency2: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency3: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "3",
-//     title: "C++ Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "my code",
-//     credits: "8",
-//     language: [
-//       "hindi"
-//     ],
-//     competency: {
-//       competency4: [
-//         "Level1"
-//       ],
-//       competency5: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency6: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "5",
-//     title: "Mongodb Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "my code",
-//     credits: "4",
-//     language: [
-//       "hindi"
-//     ],
-//     competency: {
-//       competency4: [
-//         "Level1"
-//       ],
-//       competency5: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency6: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "5",
-//     title: "Python Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "my code",
-//     credits: "1",
-//     language: [
-//       "hindi"
-//     ],
-//     competency: {
-//       competency1: [
-//         "Level1"
-//       ],
-//       competency3: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency6: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "6",
-//     title: "Next Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "my code",
-//     credits: "2",
-//     language: [
-//       "hindi"
-//     ],
-//     competency: {
-//       competency2: [
-//         "Level1"
-//       ],
-//       competency1: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency6: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   },
-//   {
-//     courseId: "7",
-//     title: "C Complete",
-//     description: "Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes testing and deployment!",
-//     providerId: "123e4567-e89b-42d3-a456-556642440011",
-//     providerName: "my code",
-//     credits: "4",
-//     language: [
-//       "hindi"
-//     ],
-//     competency: {
-//       competency3: [
-//         "Level1"
-//       ],
-//       competency5: [
-//         "Level1",
-//         "Level2"
-//       ],
-//       competency6: [
-//         "Level1"
-//       ]
-//     },
-//     imageLink: "https://courses.nestjs.com/img/logo.svg",
-//     avgRating: "0",
-//     startTime: "2023-12-05T06:25:41.270Z",
-//     endTime: "2023-12-05T06:25:41.270Z",
-//     numberOfPurchases: 1
-//   }
-// ]
-
 const getInitialValue2 = () => {
   return {
     competencies: '',
@@ -252,18 +53,25 @@ const filterData = (data: CourseType[], filterObj: filterObjType) => {
 
   let filteredResponse = data?.filter((course: CourseType) => {
     const competencyMatch =
-      !competencies || course?.competency[competencies]?.length > 0;
-
+      !competencies ||
+      course?.competency?.some(
+        (item) => item?.name?.toLowerCase() == competencies?.toLowerCase()
+      );
     const languageMatch =
       language?.length === 0 ||
       !language ||
-      language?.some((lang: string) => course?.language.includes(lang));
+      language?.some((lang: string) =>
+        course?.language
+          ?.map((item) => item?.toLowerCase())
+          ?.includes(lang?.toLowerCase())
+      );
 
     const courseProviderMatch =
       courseProviders?.length === 0 ||
       !courseProviders ||
       courseProviders?.some(
-        (provider: string) => course?.providerName === provider
+        (provider: string) =>
+          course?.providerName?.toLowerCase() === provider?.toLowerCase()
       );
 
     return competencyMatch && languageMatch && courseProviderMatch;

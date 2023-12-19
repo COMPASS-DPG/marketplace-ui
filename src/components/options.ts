@@ -20,12 +20,12 @@ export const COMPETENCY_OPTIONS = [
     value: 'competency5',
   },
   {
-    label: 'BackendEngineering',
-    value: 'BackendEngineering',
+    label: 'Backend Engineering',
+    value: 'Backend Engineering',
   },
   {
-    label: 'APIDevelopment',
-    value: 'APIDevelopment',
+    label: 'API Development',
+    value: 'API Development',
   },
   {
     label: 'Typescript',
@@ -46,12 +46,20 @@ export const PROVIDER_OPTIONS = [
     label: 'Udemy',
     value: 'Udemy',
   },
+  {
+    label: 'sdf',
+    value: 'sdf',
+  },
 ];
 
 export const LANGUAGE_OPTIONS = [
   {
     label: 'en',
     value: 'en',
+  },
+  {
+    label: 'english',
+    value: 'english',
   },
   {
     label: 'hindi',
