@@ -16,7 +16,7 @@ const SwipeSlide = ({ course }: { course: OnGoingCoursesType }) => {
         {course?.CourseInfo?.title}
       </p>
       <p
-        className={`${outfit.className} text-[13px] font-normal text-neutral-500`}
+        className={`${outfit.className} h-[50px] text-[13px] font-normal text-neutral-500`}
       >
         {course?.CourseInfo?.competency?.length > 0 &&
           course?.CourseInfo?.competency?.map((item, index) => {
